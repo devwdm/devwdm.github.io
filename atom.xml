@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://github.com/devwdm/devwdm.github.io</id>
     <title>Gridea</title>
-    <updated>2020-06-17T05:54:17.447Z</updated>
+    <updated>2020-06-17T05:58:02.772Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://github.com/devwdm/devwdm.github.io"/>
     <link rel="self" href="https://github.com/devwdm/devwdm.github.io/atom.xml"/>
@@ -10,4 +10,23 @@
     <logo>https://github.com/devwdm/devwdm.github.io/images/avatar.png</logo>
     <icon>https://github.com/devwdm/devwdm.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[为什么会有写博客这个想法]]></title>
+        <id>https://github.com/devwdm/devwdm.github.io/post/xie-bo-ke-de-yuan-yin/</id>
+        <link href="https://github.com/devwdm/devwdm.github.io/post/xie-bo-ke-de-yuan-yin/">
+        </link>
+        <updated>2020-06-17T05:54:29.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="为什么会有写博客这个想法">为什么会有写博客这个想法</h1>
+<h2 id="诞生">诞生</h2>
+<p>我的想法很简单，通过写博客来总结我所以学习的东西。这样也方便我自己日后查看，至于其他的我没有想过。就这样子开始诞生了一个要自己搭建博客的想法，我已经不记得我具体哪个时间开始有这个想法。诞生这个想法大概是我在大三的时候，也就是一年多之前的事情。</p>
+<h2 id="首个博客">首个博客</h2>
+<p>我用的是Hexo这个来搭建我的第一个博客，其实事情进展得并没有那么顺利。我在本机搭建好写好博客想推送到我自己的云服务器的时候总是推送失败，后来放弃了推送到远程服务器。这个事情没有坚持多久，很快就放弃。其中一个原因是它不能推送到远程服器，其实Hexo是有这个功能及网有很多大神也写教程。但我照着做了，也没有成功就这样放弃了。后来连本机的也放弃了，再过一段时间重装系统没有备份好数据所有的东西都不见了。写博客总结的事情又被我抛到……</p>
+<h2 id="遗忘的想法又重生">遗忘的想法又重生</h2>
+<p>这个想法的诞生是我在工作中我领导要给大家分享一个东西，其实我当时对那个东西并不是特别熟。我平时用的也不多，用到的时候忘记了再去查。就这样一次意外我开始觉得我学习的东西被别人认可了，觉得分享自己学习的东西很快乐也能够得到他提供给我的意见或建议。然后我又开始想写博客了，把我学习的东西都总结出来放在博客上。下次用到时看自己曾经写过的东西，一下子法力就恢复了。</p>
+<h2 id="再出发">再出发</h2>
+<p>我又开始找用哪个工具搭建自己的博客比较好，最后我选择了Gidea这个工具。这也是我一个朋友推荐的，在编程技术上他用的东西我觉得都ok。我自己也对比了其他的工具还是觉得这个比较好，这次搭建的过程也比较顺利。比较顺利的原因不可否认的是我的技术比之前好了，一切顺利。</p>
+<h2 id="最后">最后</h2>
+<p>一个想法的诞生到执行这个过程时间越长，错过的东西会越多。一个想法只诞生没有执行力，那你终将会失去追求实现这个想法的快乐。2020年的其中一个小目标，坚持写博客提升自我。只争朝夕，不负邵华。</p>
+]]></content>
+    </entry>
 </feed>
