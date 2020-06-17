@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://wdm.life</id>
     <title>wdm.life</title>
-    <updated>2020-06-17T11:24:43.993Z</updated>
+    <updated>2020-06-17T14:56:33.544Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://wdm.life"/>
     <link rel="self" href="https://wdm.life/atom.xml"/>
-    <subtitle>分享快乐</subtitle>
+    <subtitle>阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。</subtitle>
     <logo>https://wdm.life/images/avatar.png</logo>
     <icon>https://wdm.life/favicon.ico</icon>
     <rights>All rights reserved 2020, wdm.life</rights>
