@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://wdm.life</id>
-    <title>wdm.life</title>
-    <updated>2020-06-17T14:56:33.544Z</updated>
+    <title>devwdm</title>
+    <updated>2020-06-17T14:58:50.520Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://wdm.life"/>
     <link rel="self" href="https://wdm.life/atom.xml"/>
     <subtitle>阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。</subtitle>
     <logo>https://wdm.life/images/avatar.png</logo>
     <icon>https://wdm.life/favicon.ico</icon>
-    <rights>All rights reserved 2020, wdm.life</rights>
-    <entry>
-        <title type="html"><![CDATA[MYSQL学习笔记]]></title>
-        <id>https://wdm.life/post/mysql-xue-xi-bi-ji/</id>
-        <link href="https://wdm.life/post/mysql-xue-xi-bi-ji/">
-        </link>
-        <updated>2020-06-17T11:23:36.000Z</updated>
-    </entry>
+    <rights>All rights reserved 2020, devwdm</rights>
     <entry>
         <title type="html"><![CDATA[GoLand（狗浪） 学习笔记]]></title>
         <id>https://wdm.life/post/golandgou-lang-xue-xi-bi-ji/</id>
