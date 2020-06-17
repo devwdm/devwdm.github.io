@@ -1,13 +1,26 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>为什么会有写博客这个想法 | wdm的博客</title>
-<link rel="shortcut icon" href="http://github.com/devwdm/devwdm.github.io/favicon.ico?v=1592375475282">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
-<link rel="stylesheet" href="http://github.com/devwdm/devwdm.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="为什么会有写博客这个想法 | wdm的博客 - Atom Feed" href="http://github.com/devwdm/devwdm.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+    <meta charset="utf-8" >
+
+<title>为什么会有写博客这个想法 | wdm.life</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://devwdm.github.io/favicon.ico?v=1592384091191">
+<link rel="stylesheet" href="https://devwdm.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
 
@@ -15,90 +28,81 @@
 诞生
 我的想法很简单，通过写博客来总结我所以学习的东西。这样也方便我自己日后查看，至于其他的我没有想过。就这样子开始诞生了一个要自己搭建博客的想法，我已经不记得我具体哪个时间开始有这个想法。诞生这个想法大概是我在大..." />
     <meta name="keywords" content="想法,独白" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="http://github.com/devwdm/devwdm.github.io">
-  <img class="avatar" src="http://github.com/devwdm/devwdm.github.io/images/avatar.png?v=1592375475282" alt="">
-  </a>
-  <h1 class="site-title">
-    wdm的博客
-  </h1>
-  <p class="site-description">
-    分享快乐
-  </p>
-  <div class="menu-container">
-    
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://devwdm.github.io">
+        <img src="https://devwdm.github.io/images/avatar.png?v=1592384091191" class="site-logo">
+        <h1 class="site-title">wdm.life</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
       
-        <a href="/" class="menu">
-          首页
-        </a>
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
       
-    
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
       
-        <a href="/archives" class="menu">
-          归档
-        </a>
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
       
-    
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
       
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+    </div>
   </div>
-  <div class="social-container">
-    
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
+      
+    </div>
+    <div class="site-description">
+      分享快乐
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://devwdm.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
   </div>
 </div>
 
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              为什么会有写博客这个想法
-            </h2>
-            <div class="post-info">
-              <span>
-                2020-01-06
-              </span>
-              <span>
-                3 min read
-              </span>
-              
-                <a href="http://github.com/devwdm/devwdm.github.io/hEET36qyc/" class="post-tag">
-                  # 想法
-                </a>
-              
-                <a href="http://github.com/devwdm/devwdm.github.io/7RWVJfK8v/" class="post-tag">
-                  # 独白
-                </a>
-              
-            </div>
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">为什么会有写博客这个想法</h2>
+            <div class="post-date">2020-01-06</div>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <h1 id="为什么会有写博客这个想法">为什么会有写博客这个想法</h1>
+            <div class="post-content" v-pre>
+              <h1 id="为什么会有写博客这个想法">为什么会有写博客这个想法</h1>
 <h2 id="诞生">诞生</h2>
 <p>我的想法很简单，通过写博客来总结我所以学习的东西。这样也方便我自己日后查看，至于其他的我没有想过。就这样子开始诞生了一个要自己搭建博客的想法，我已经不记得我具体哪个时间开始有这个想法。诞生这个想法大概是我在大三的时候，也就是一年多之前的事情。</p>
 <h2 id="首个博客">首个博客</h2>
@@ -110,104 +114,77 @@
 <h2 id="最后">最后</h2>
 <p>一个想法的诞生到执行这个过程时间越长，错过的东西会越多。一个想法只诞生没有执行力，那你终将会失去追求实现这个想法的快乐。2020年的其中一个小目标，坚持写博客提升自我。只争朝夕，不负邵华。</p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E5%86%99%E5%8D%9A%E5%AE%A2%E8%BF%99%E4%B8%AA%E6%83%B3%E6%B3%95">为什么会有写博客这个想法</a>
-<ul>
-<li><a href="#%E8%AF%9E%E7%94%9F">诞生</a></li>
-<li><a href="#%E9%A6%96%E4%B8%AA%E5%8D%9A%E5%AE%A2">首个博客</a></li>
-<li><a href="#%E9%81%97%E5%BF%98%E7%9A%84%E6%83%B3%E6%B3%95%E5%8F%88%E9%87%8D%E7%94%9F">遗忘的想法又重生</a></li>
-<li><a href="#%E5%86%8D%E5%87%BA%E5%8F%91">再出发</a></li>
-<li><a href="#%E6%9C%80%E5%90%8E">最后</a></li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
-          </article>
+            
+              <div class="tag-container">
+                
+                  <a href="https://devwdm.github.io/hEET36qyc/" class="tag">
+                    想法
+                  </a>
+                
+                  <a href="https://devwdm.github.io/7RWVJfK8v/" class="tag">
+                    独白
+                  </a>
+                
+              </div>
+            
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
         </div>
-
-        
-
-        
-          
-            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-
-<div id="gitalk-container"></div>
-
-<script>
-
-  var gitalk = new Gitalk({
-    clientID: '',
-    clientSecret: '',
-    repo: '',
-    owner: '',
-    admin: [''],
-    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-    distractionFreeMode: false  // Facebook-like distraction free mode
-  })
-
-  gitalk.render('gitalk-container')
-
-</script>
-
-          
-
-          
-        
-
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="http://github.com/devwdm/devwdm.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
-</div>
-
       </div>
     </div>
 
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
     <script>
-      hljs.initHighlightingOnLoad()
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
-
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
-
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
+      gitalk.render('gitalk-container')
 
     </script>
+  
+
+  
+
+
+
+
   </body>
 </html>
