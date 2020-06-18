@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://wdm.life</id>
     <title>devwdm</title>
-    <updated>2020-06-18T00:38:10.673Z</updated>
+    <updated>2020-06-18T02:09:32.104Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://wdm.life"/>
     <link rel="self" href="https://wdm.life/atom.xml"/>
@@ -11,7 +11,14 @@
     <icon>https://wdm.life/favicon.ico</icon>
     <rights>All rights reserved 2020, devwdm</rights>
     <entry>
-        <title type="html"><![CDATA[GoLand（狗浪） 学习笔记]]></title>
+        <title type="html"><![CDATA[MYSQL学习笔记]]></title>
+        <id>https://wdm.life/post/mysql-xue-xi-bi-ji/</id>
+        <link href="https://wdm.life/post/mysql-xue-xi-bi-ji/">
+        </link>
+        <updated>2020-06-17T11:23:36.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Go 学习笔记]]></title>
         <id>https://wdm.life/post/golandgou-lang-xue-xi-bi-ji/</id>
         <link href="https://wdm.life/post/golandgou-lang-xue-xi-bi-ji/">
         </link>
