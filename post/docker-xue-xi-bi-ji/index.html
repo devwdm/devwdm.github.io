@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Linux之centos学习笔记 | 日&amp;月星辰</title>
+<title>Docker学习笔记 | 日&amp;月星辰</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,15 +24,17 @@
 
 
 
-    <meta name="description" content="Linux之centos学习笔记
-nohup
-后台执行命令，用exit退出不影响后台进程。其他方式可能会影响。
-$:nohup yum -y install docker-ce.x86_64 &amp;
-
-tail
-实时滚动现实log信息
-..." />
-    <meta name="keywords" content="Linux,命令,运维,安装,配置" />
+    <meta name="description" content="Docker学习笔记
+常用命令
+镜像
+# 拉取镜像 镜像名:版本号
+docker pull mysql:5.6
+#  查看
+docker images -a
+# 删除单个镜像
+docker image rm #镜像ID
+# 删除所有不使用镜..." />
+    <meta name="keywords" content="dokcer,运维,mysql,笔记,编程" />
   </head>
   <body>
     <div id="app" class="main">
@@ -107,64 +109,138 @@ tail
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Linux之centos学习笔记</h2>
+            <h2 class="post-title">Docker学习笔记</h2>
             <div class="post-date">2020-06-18 23:06:00</div>
             
             <div class="post-content" v-pre>
-              <h1 id="linux之centos学习笔记">Linux之centos学习笔记</h1>
-<h2 id="nohup">nohup</h2>
-<p>后台执行命令，用exit退出不影响后台进程。其他方式可能会影响。</p>
-<pre><code class="language-shell">$:nohup yum -y install docker-ce.x86_64 &amp;
+              <h1 id="docker学习笔记">Docker学习笔记</h1>
+<h2 id="常用命令">常用命令</h2>
+<h3 id="镜像">镜像</h3>
+<pre><code class="language-shell"># 拉取镜像 镜像名:版本号
+docker pull mysql:5.6
+#  查看
+docker images -a
+# 删除单个镜像
+docker image rm #镜像ID
+# 删除所有不使用镜像
+docker image rmi $(docker images -q)
+
 </code></pre>
-<h2 id="tail">tail</h2>
-<p>实时滚动现实log信息</p>
-<pre><code class="language-shell">$: tail -f ***.log
+<h3 id="容器">容器</h3>
+<pre><code class="language-shell"># 启动
+docker container start #id/容器名称
+# 终止
+docker container stop # id/容器名称
+# 删除单个容器 
+docker container rm  # id/容器名称
+# 删除所有已停止的容器
+docker container rm $(docker ps -aq)
+# 删除所有容器（含正在运行）
+docker container rm -f $(docker ps -aq)
+#查看正在运行的容器
+docker container ps
+# 查看所有
+docker container ls -a 
+# 停止所有容器
+docker stop $(docker ps -aq)
+# 清理所有处于终止状态的容器
+docker container prune
+# 杀死所有正在运行的容器
+docker kill $(docker ps -aq)
+
 </code></pre>
-<h2 id="docker">Docker</h2>
-<h3 id="安装">安装</h3>
-<pre><code class="language-shell"># 查找合适的版本
-$:yum list docker-ce --showduplicates | sort -r
-$:yum -y install docker-ce.x86_64
+<h3 id="网络">网络</h3>
+<pre><code class="language-shell"># 自定义
+docker network create new_net_name
+# 查看
+docker network ls
+# 连接
+docker network connect
+# 查看连接信息
+docker network inspect #id
+# 删除某一个
+docker network rm #id
+# 删除所有
+docker network prune
 </code></pre>
-<h3 id="启动">启动</h3>
-<pre><code class="language-shell">$:service docker start
+<h3 id="查看资源占用情况">查看资源占用情况</h3>
+<pre><code class="language-shell">docker stats
 </code></pre>
-<h3 id="验证">验证</h3>
-<pre><code class="language-shell">$:docker -v
-Docker version 19.03.11, build 42e35e61f3
+<h2 id="进阶操作">进阶操作</h2>
+<h3 id="显示所有容器ip">显示所有容器IP</h3>
+<pre><code class="language-shell">docker inspect --format='{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps -aq)
 </code></pre>
-<h2 id="docker-compose">docker-compose</h2>
-<h3 id="安装-2">安装</h3>
-<pre><code class="language-shell">$:yum -y install python3
-$:pip3 install docker-compose
+<h2 id="dockerfile">Dockerfile</h2>
+<pre><code># 镜像
+FROM golang
+# 创建工作工作目录
+WORKDIR $GOPATH/src/golang
+# 复制文件到到镜像指定目录
+COPY . $GOPATH/src/golang
+# 构建镜像
+RUN go build .
+# 暴露端口
+EXPOSE 8001
+# 程序入入口
+ENTRYPOINT [&quot;./golang&quot;]
 </code></pre>
-<p>验证</p>
-<pre><code class="language-shell">$:docker-compose -v
-docker-compose version 1.25.5, build 8a1c60f6
+<h1 id="docker-compose">docker-compose</h1>
+<pre><code class="language-shell"># 启动 配置文件名为docker-compse.yml  -d后台启动
+docker-compse -f #docker-compose.yml up -d
+</code></pre>
+<h3 id="时区设置">时区设置</h3>
+<pre><code class="language-dockerfile">environment:
+	TZ: Asia/Shanghai #中国时区
+</code></pre>
+<h3 id="mysql">MYSQL</h3>
+<pre><code class="language-dockerfile">version: '3'
+services:
+  mysql:
+    #构建mysql镜像
+    image: mysql:5.6
+    container_name: mysqlv56 # 容器名
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci #设置utf8字符集
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456 #root管理员用户密码
+      MYSQL_USER: test #创建test用户
+      MYSQL_PASSWORD: test #设置test用户的密码
+      TZ: Asia/Shanghai
+    ports:
+      - '3306:3306' #host物理直接映射端口为3306
+    volumes:
+      #mysql数据库挂载到host物理机目录
+      - '~/docker/mysql5_6/data:/var/lib/mysql'
+      # 容器的配置目录挂载到host物理机目录
+      # - '~/docker/mysql5_6/mysql.conf.d:/etc/mysql/mysql.conf.d'
+
+</code></pre>
+<h2 id="gitlab">Gitlab</h2>
+<pre><code>
 </code></pre>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://wdm.life/tag/linux/" class="tag">
-                    Linux
-                  </a>
-                
-                  <a href="https://wdm.life/tag/ming-ling/" class="tag">
-                    命令
+                  <a href="https://wdm.life/tag/dokcer/" class="tag">
+                    dokcer
                   </a>
                 
                   <a href="https://wdm.life/tag/yun-wei/" class="tag">
                     运维
                   </a>
                 
-                  <a href="https://wdm.life/tag/an-zhuang/" class="tag">
-                    安装
+                  <a href="https://wdm.life/tag/mysql/" class="tag">
+                    mysql
                   </a>
                 
-                  <a href="https://wdm.life/tag/pei-zhi/" class="tag">
-                    配置
+                  <a href="https://wdm.life/tag/6kHox7aHnJ/" class="tag">
+                    笔记
+                  </a>
+                
+                  <a href="https://wdm.life/tag/na1C2XWvxe/" class="tag">
+                    编程
                   </a>
                 
               </div>
@@ -172,9 +248,9 @@ docker-compose version 1.25.5, build 8a1c60f6
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://wdm.life/post/ab-ya-li-ce-shi-xue-xi-bi-ji/">
+                <a href="https://wdm.life/post/linux-zhi-centos-xue-xi-bi-ji/">
                   <h3 class="post-title">
-                    ab压力测试学习笔记
+                    Linux之centos学习笔记
                   </h3>
                 </a>
               </div>
