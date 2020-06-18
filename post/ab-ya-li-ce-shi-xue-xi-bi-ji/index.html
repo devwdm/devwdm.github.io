@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>ab压力测试学习笔记 | 日&amp;月星辰</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1592482719705">
+<link rel="stylesheet" href="https://wdm.life/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="ab压力测试学习笔记
+示例
+$:ab -c 10 -n 10 http://wdm.life/
+This is ApacheBench, Version 2.3 &lt;$Revision: 1874286 $&gt;
+Copyright ..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://wdm.life">
+        <img src="https://wdm.life/images/avatar.png?v=1592482719705" class="site-logo">
+        <h1 class="site-title">日&amp;月星辰</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/devwdm" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://wdm.life/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">ab压力测试学习笔记</h2>
+            <div class="post-date">2020-06-18 20:06:00</div>
+            
+            <div class="post-content" v-pre>
+              <h1 id="ab压力测试学习笔记">ab压力测试学习笔记</h1>
+<h2 id="示例">示例</h2>
+<pre><code class="language-shell">$:ab -c 10 -n 10 http://wdm.life/
+This is ApacheBench, Version 2.3 &lt;$Revision: 1874286 $&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking wdm.life (be patient).....done
+
+
+Server Software:        GitHub.com
+Server Hostname:        wdm.life
+Server Port:            80
+
+Document Path:          /
+Document Length:        4978 bytes
+
+Concurrency Level:      10
+Time taken for tests:   5.076 seconds
+Complete requests:      10
+Failed requests:        0
+Total transferred:      56162 bytes
+HTML transferred:       49780 bytes
+Requests per second:    1.97 [#/sec] (mean)
+Time per request:       5075.852 [ms] (mean)
+Time per request:       507.585 [ms] (mean, across all concurrent requests)
+Transfer rate:          10.81 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       26  239 421.2     47    1039
+Processing:    28  587 1111.9    126    3625
+Waiting:       26   67  85.0     46     305
+Total:         58  825 1187.6    340    3654
+
+Percentage of the requests served within a certain time (ms)
+  50%    340
+  66%    487
+  75%   1161
+  80%   2096
+  90%   3654
+  95%   3654
+  98%   3654
+  99%   3654
+ 100%   3654 (longest request)
+</code></pre>
+<h2 id="参数说明">参数说明</h2>
+<p>-c	concurrency，并发数默认最大数256。</p>
+<p>-n	requests，总共执行次数。</p>
+<p>-t	timelimit，等待响应的最大时间（s）。</p>
+<p>-b	windowsseze，TCP缓冲大小（byte）。</p>
+<p>-B	address，建立传出连接时要绑定的地址。</p>
+<p>-p	postfile，post上传文件，加外要设置-T参数。</p>
+<p>-u	putfile，put上传文件，加外要设置-T参数。</p>
+<p>-T	content-type，post/put请求的设置。</p>
+<p>-v	verbosity，打印信息。</p>
+<p>-w	在HTML表格中打印出结果。</p>
+<p>-i	使用HEAD而不是GET。</p>
+<p>-x	attributes，插入为表格属性的字符串。</p>
+<p>-y	attributes，作为tr属性插入的字符串。</p>
+<p>-z	attributes，作为td或th属性插入的字符串。</p>
+<p>-C	attribute，添加cookie，例如。 'Apache = 1234'。 （可重复）。</p>
+<p>-H	attribute，添加任意标题行，例如。 'Accept-Encoding：gzip'插入所有普通标题行之后。 （可重复）。</p>
+<p>-A	attribute，添加基本的WWW身份验证，属性是用冒号分隔的用户名和密码。</p>
+<p>-P	attribute，添加基本代理身份验证，属性是用冒号分隔的用户名和密码。</p>
+<p>-X	proxy:port，代理服务器和要使用的端口号。</p>
+<p>-V	打印版本号并退出。</p>
+<p>-k	使用HTTP KeepAlive功能。</p>
+<p>-d	不显示百分号。</p>
+<p>-S	不要显示置信度估计器和警告。</p>
+<p>-q	执行超过150个请求时不显示进度。</p>
+<p>-L	接受可变的文档长度（用于动态页面）。</p>
+<p>-g	filename，将收集的数据输出到gnuplot格式文件。</p>
+<p>-e	filename，输出CSV文件并提供百分比。</p>
+<p>-r	不要退出套接字接收错误。</p>
+<p>-m	method，方法名称。</p>
+<p>-h	显示用法信息（此消息）。</p>
+<p>-I	禁用TLS服务器名称指示（SNI）扩展。</p>
+<p>-Z	ciphersuite，指定SSL / TLS密码套件（请参阅openssl密码）。</p>
+<p>-f	protocol，指定SSL / TLS协议（TLS1，TLS1.1，TLS1.2或ALL）</p>
+<p>-E	certfile，指定可选的客户端证书链和私钥</p>
+<h2 id="错误解决方案mac">错误解决方案（mac）</h2>
+<ol>
+<li>
+<h3 id="socket-too-many-open-files-24">socket: Too many open files (24)</h3>
+<p>查看</p>
+<pre><code class="language-shell">$:ulimit -a
+    -t: cpu time (seconds)              unlimited
+    -f: file size (blocks)              unlimited
+    -d: data seg size (kbytes)          unlimited
+    -s: stack size (kbytes)             8192
+    -c: core file size (blocks)         0
+    -v: address space (kbytes)          unlimited
+    -l: locked-in-memory size (kbytes)  unlimited
+    -u: processes                       2784
+    -n: file descriptors                256
+</code></pre>
+<p>临时修改</p>
+<pre><code class="language-shell">$:ulimit -n 1024
+</code></pre>
+<p>确认查看</p>
+<pre><code class="language-shell">$:ulimit -a
+    -t: cpu time (seconds)              unlimited
+    -f: file size (blocks)              unlimited
+    -d: data seg size (kbytes)          unlimited
+    -s: stack size (kbytes)             8192
+    -c: core file size (blocks)         0
+    -v: address space (kbytes)          unlimited
+    -l: locked-in-memory size (kbytes)  unlimited
+    -u: processes                       2784
+    -n: file descriptors                1024
+</code></pre>
+<p>如查还不ok就进行以下操作</p>
+<pre><code class="language-shell"># 如果还不行就执行以下命令 永久生效就添加到 ~/.zshrc 文件下
+$:sudo launchctl limit maxfiles 100000 500000
+$:sudo ulimit -n 100000
+</code></pre>
+<p>再不行就修改aparoche 的配置文件吧</p>
+<pre><code class="language-shell">$:sudo vim /private/etc/apache2/extra/httpd-default.conf
+# 修改这个它  MaxKeepAliveRequests 1000
+MaxKeepAliveRequests 1000
+</code></pre>
+</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://wdm.life/post/mysql-xue-xi-bi-ji/">
+                  <h3 class="post-title">
+                    MYSQL学习笔记
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '',
+        clientSecret: '',
+        repo: '',
+        owner: '',
+        admin: [''],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
