@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://wdm.life</id>
     <title>日&amp;月星辰</title>
-    <updated>2020-06-18T13:13:44.424Z</updated>
+    <updated>2020-06-18T15:28:58.370Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://wdm.life"/>
     <link rel="self" href="https://wdm.life/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>https://wdm.life/images/avatar.png</logo>
     <icon>https://wdm.life/favicon.ico</icon>
     <rights>All rights reserved 2020, 日&amp;月星辰</rights>
+    <entry>
+        <title type="html"><![CDATA[Linux之centos学习笔记]]></title>
+        <id>https://wdm.life/post/linux-zhi-centos-xue-xi-bi-ji/</id>
+        <link href="https://wdm.life/post/linux-zhi-centos-xue-xi-bi-ji/">
+        </link>
+        <updated>2020-06-18T15:27:37.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ab压力测试学习笔记]]></title>
         <id>https://wdm.life/post/ab-ya-li-ce-shi-xue-xi-bi-ji/</id>
