@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>GitLab学习笔记 | 日&amp;月星辰</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1592563483613">
+<link rel="stylesheet" href="https://wdm.life/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="GitLab学习笔记
+安装
+条件
+
+Docker
+Docker-compose
+内存至少分配4GB
+
+通过docker-compose.yml来安装启动，注意wdm.life是我的域名我在本机上加了自定义域名解析。使用IP容易出错，127...." />
+    <meta name="keywords" content="Gitlab,DevOps,CICD,dokcer,运维" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://wdm.life">
+        <img src="https://wdm.life/images/avatar.png?v=1592563483613" class="site-logo">
+        <h1 class="site-title">日&amp;月星辰</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/devwdm" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://wdm.life/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">GitLab学习笔记</h2>
+            <div class="post-date">2020-06-19 18:06:00</div>
+            
+            <div class="post-content" v-pre>
+              <h1 id="gitlab学习笔记">GitLab学习笔记</h1>
+<h1 id="安装">安装</h1>
+<h3 id="条件">条件</h3>
+<ol>
+<li><a href="https://hub.docker.com/">Docker</a></li>
+<li><a href="https://docs.docker.com/compose/">Docker-compose</a></li>
+<li>内存至少分配4GB</li>
+</ol>
+<p>通过docker-compose.yml来安装启动，注意wdm.life是我的域名我在本机上加了自定义域名解析。使用IP容易出错，127.0.0.1可更改为你的IP。</p>
+<p>mac 下添加本域名解析方式，添加一行 127.0.0.1 wdm.life</p>
+<pre><code class="language-shell">$ vim /etc/hosts
+#添加一行 127.0.0.1 wdm.life
+</code></pre>
+<pre><code class="language-yaml">version: '3.0'
+services:
+  redis:
+    restart: always
+    image: redis:6.0.5
+    container_name: gitlab-redis
+    command:
+      - --loglevel warning
+    networks:
+      - gitlab_net
+    volumes:
+      - &quot;~/docker/gitlab/redis:/var/lib/redis&quot;
+  postgresql:
+    restart: always
+    image: postgres:12.3
+    container_name: gitlab-postgresql
+    volumes:
+      - &quot;~/docker/gitlab/postgresql_data:/var/lib/postgresql&quot;
+    networks:
+      - gitlab_net
+    environment:
+      - DB_NAME=gitlabhq_production
+      - DB_USER=gitlab
+      - DB_PASS=password
+      - DB_EXTENSION=pg_trgm
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  gitlab:
+    image: gitlab/gitlab-ce:13.0.6-ce.0
+    restart: always
+    hostname: wdm.life
+    container_name: &quot;devops-gitlab&quot;
+    depends_on:
+    - redis
+    - postgresql
+    ports:
+      - &quot;80:80&quot;
+      - &quot;443:443&quot;
+      - &quot;22:222&quot;
+    environment:
+        - DB_ADAPTER=postgresql
+        - DB_ENCODING=utf8
+        - DB_HOST=wdm.life
+        - DB_PORT=5432
+        - DB_NAME=gitlabhq_production
+        - DB_USER=gitlab
+        - DB_PASS=password
+        - DB_POOL=10
+
+        - REDIS_HOST=wdm.life
+        - REDIS_PORT=6379
+        - REDIS_DB_NUMBER=0
+        - DEBUG=false
+        - GITLAB_HOST=wdm.life
+        - GITLAB_PORT=80
+        # ssh端口号22
+        - GITLAB_SSH_PORT=22
+        # 监听端口默认22
+        - GITLAB_SSH_LISTEN_PORT=22
+        # GitLab服务器的相对网址 
+        - GITLAB_RELATIVE_URL_ROOT=
+        # 是否支持https 默认为false
+        - GITLAB_HTTPS=false
+        # 主题
+        - GITLAB_DEFAULT_THEME=7
+        # 首次运行 启用或禁用注册 true
+        - GITLAB_SIGNUP_ENABLED=false
+        # 启用或禁用Gitlab的支持
+        - GITLAB_ARTIFACTS_ENABLED=false
+        # 设置自动备份时间 04:00
+        - GITLAB_BACKUP_TIME=22:00
+        # 备份保留时间 默认7天9604800s)后过期 0为永久保存
+        - GITLAB_BACKUP_EXPIRY=
+        # 备份方式 daily weekly monthly disable
+        - GITLAB_BACKUP_SCHEDULE=weekly
+        # 加密信息
+        - GITLAB_SECRETS_DB_KEY_BASE=long-and-random-alphanumeric-string
+        - GITLAB_SECRETS_SECRET_KEY_BASE=long-and-random-alphanumeric-string
+        - GITLAB_SECRETS_OTP_KEY_BASE=long-and-random-alphanumeric-string
+        # 时区
+        - GITLAB_TIMEZONE=Asia/Shanghai
+        # root 首次登录用户配置信息
+        - GITLAB_ROOT_PASSWORD=test123.
+        # 设置GitLab页面外部http以在独立端口上接收请求。默认禁用
+        - GITLAB_PAGES_EXTERNAL_HTTP=http://wdm.life
+        # 设置GitLab页面外部https以在独立端口上接收请求。默认禁用
+        - GITLAB_PAGES_ACCESS_CONTROL_SERVER=https://wdm.life
+       
+
+    volumes:
+      - &quot;~/docker/gitlab/gitlab/data:/home/git/data&quot;
+    networks:
+      - gitlab_net
+  
+  runner:
+    image: gitlab/gitlab-runner:v13.0.1
+    container_name: &quot;gitlab-runner&quot;
+    restart: always
+    volumes:
+      - &quot;~/docker/gitlab_runner/config:/etc/gitlab-runner&quot;
+      - &quot;~/docker/gitlab_runner/var/run/docker.sock:/var/run/docker.sock&quot;
+    networks:
+      - gitlab_net
+    extra_hosts:
+      - &quot;wdm.life:127.0.0.1&quot;
+networks:
+  gitlab_net:
+</code></pre>
+<p>备注：在mac通过这个方式来添加docker网络连接可能会失败。可执行以下命令来解决</p>
+<pre><code class="language-shell">$ docker network create gitlab_net
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://wdm.life/tag/gitlab/" class="tag">
+                    Gitlab
+                  </a>
+                
+                  <a href="https://wdm.life/tag/devops/" class="tag">
+                    DevOps
+                  </a>
+                
+                  <a href="https://wdm.life/tag/cicd/" class="tag">
+                    CICD
+                  </a>
+                
+                  <a href="https://wdm.life/tag/dokcer/" class="tag">
+                    dokcer
+                  </a>
+                
+                  <a href="https://wdm.life/tag/yun-wei/" class="tag">
+                    运维
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://wdm.life/post/docker-xue-xi-bi-ji/">
+                  <h3 class="post-title">
+                    Docker学习笔记
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'e4e7110311b4c3ba9cb7',
+        clientSecret: '2feab7604d5fe1d18b9059dea0d7b8f58ebbfe30',
+        repo: 'comments',
+        owner: 'devwdm',
+        admin: ['devwdm'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
