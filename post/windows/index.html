@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Markdown常用技巧 | 日&amp;月星辰</title>
+<title>Windows | 日&amp;月星辰</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,14 +24,12 @@
 
 
 
-    <meta name="description" content="
-  Markdown常用技巧
-
- 
-hr
-水平分割线 代码
-&lt;hr style=&quot;width: 100%; height: 6px; border: none; background-color: #ff9933&quot..." />
-    <meta name="keywords" content="Markdown,MD,Typora" />
+    <meta name="description" content="Windows
+UEFI引导修复
+如果你以任何方式都无法进入 Windows 10，则需要一些安装盘来启动，去修复：安装盘启动修复界面，按 Shift + F10，打开终端，输入 DISKPART
+$ list disk
+$ select ..." />
+    <meta name="keywords" content="系统,windows,Mac" />
   </head>
   <body>
     <div id="app" class="main">
@@ -106,41 +104,53 @@ hr
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Markdown常用技巧</h2>
-            <div class="post-date">2020-06-20 21:06:00</div>
+            <h2 class="post-title">Windows</h2>
+            <div class="post-date">2020-06-21 21:06:00</div>
             
             <div class="post-content" v-pre>
-              <center>
-  <h1>Markdown常用技巧
-</h1>
-</center> 
-<h2 id="hr">hr</h2>
-<p>水平分割线 代码</p>
-<pre><code class="language-html">&lt;hr style=&quot;width: 100%; height: 6px; border: none; background-color: #ff9933&quot;/&gt;
+              <center><h1>Windows</h1></center>
+<h1 id="uefi引导修复">UEFI引导修复</h1>
+<p>如果你以任何方式都无法进入 Windows 10，则需要一些安装盘来启动，去修复：安装盘启动修复界面，按 Shift + F10，打开终端，输入 DISKPART</p>
+<pre><code class="language-sh">$ list disk
+$ select disk n           # (n) 为你 Windows 10 所在的磁盘
+$ list partition
+$ select partition n           # (n) 为你 Windows 10 所在硬盘的 EFI 分区
+$ assign letter=b         # 将 EFI 分区设为 b 盘
+$ exit
+$ cd /d b:\EFI\Microsoft\Boot\
+$ bootrec /fixboot
+#如果通过其他方式能进入 Windows 10，则可以打开管理员权限的终端
+
+$ diskpart
+$ list disk
+$ select disk n
+$ list partition
+$ select partition n
+$ assign letter=b:
+$ exit
+$ cd /d b:\EFI\Microsoft\Boot\
+$ bcdboot c:\Windows /l zh-CN /s b: /f ALL
+#重启电脑ok
 </code></pre>
-<p>效果</p>
-<hr style="width: 100%; height: 6px; border: none; background-color: #ff9933"/>
-<h2 id="font">font</h2>
-<p>字体样式设置 代码</p>
-<pre><code class="language-html">&lt;font color=#ff9933&gt; wdm.life &lt;/font&gt;
+<h1 id="windows与mac时间不一致">Windows与Mac时间不一致</h1>
+<p>解决方式执行以下cmd命令</p>
+<pre><code class="language-sh">$ Reg add HKLM\SYSTEM\CurrentControlSet\Control\TimeZoneInformation /v RealTimeIsUniversal /t REG_DWORD /d 1
 </code></pre>
-<p>效果</p>
-<p><font color=#ff9933> wdm.life </font></p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://wdm.life/tag/markdown/" class="tag">
-                    Markdown
+                  <a href="https://wdm.life/tag/xi-tong/" class="tag">
+                    系统
                   </a>
                 
-                  <a href="https://wdm.life/tag/md/" class="tag">
-                    MD
+                  <a href="https://wdm.life/tag/windows/" class="tag">
+                    windows
                   </a>
                 
-                  <a href="https://wdm.life/tag/typora/" class="tag">
-                    Typora
+                  <a href="https://wdm.life/tag/mac/" class="tag">
+                    Mac
                   </a>
                 
               </div>
@@ -148,9 +158,9 @@ hr
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://wdm.life/post/gitlab-xue-xi-bi-ji/">
+                <a href="https://wdm.life/post/markdown-chang-yong-ji-qiao/">
                   <h3 class="post-title">
-                    GitLab学习笔记
+                    Markdown常用技巧
                   </h3>
                 </a>
               </div>
