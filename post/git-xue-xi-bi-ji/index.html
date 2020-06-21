@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Linux之centos学习笔记 | 日&amp;月星辰</title>
+<title>Git学习笔记 | 日&amp;月星辰</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,15 +24,17 @@
 
 
 
-    <meta name="description" content="Linux之centos学习笔记
-nohup
-后台执行命令，用exit退出不影响后台进程。其他方式可能会影响。
-$:nohup yum -y install docker-ce.x86_64 &amp;
+    <meta name="description" content="Git学习笔记
+init	创建仓库
+$ git init
 
-tail
-实时滚动现实log信息
-..." />
-    <meta name="keywords" content="Linux,命令,运维,安装,配置,笔记" />
+add	将文件添加到缓存区
+$ git add fie_name #添加单个文件
+$ git add . #当前目录下的所有文件
+
+commmit	提交到本地仓库
+$ git co..." />
+    <meta name="keywords" content="git,仓库,管理" />
   </head>
   <body>
     <div id="app" class="main">
@@ -107,68 +109,103 @@ tail
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Linux之centos学习笔记</h2>
-            <div class="post-date">2020-06-18 23:06:00</div>
+            <h2 class="post-title">Git学习笔记</h2>
+            <div class="post-date">2020-06-21 22:06:00</div>
             
             <div class="post-content" v-pre>
-              <h1 id="linux之centos学习笔记">Linux之centos学习笔记</h1>
-<h2 id="nohup">nohup</h2>
-<p>后台执行命令，用exit退出不影响后台进程。其他方式可能会影响。</p>
-<pre><code class="language-shell">$:nohup yum -y install docker-ce.x86_64 &amp;
+              <center><h1>Git学习笔记</h1></center>
+<h1 id="init创建仓库">init	创建仓库</h1>
+<pre><code class="language-sh">$ git init
 </code></pre>
-<h2 id="tail">tail</h2>
-<p>实时滚动现实log信息</p>
-<pre><code class="language-shell">$: tail -f ***.log
+<h1 id="add将文件添加到缓存区">add	将文件添加到缓存区</h1>
+<pre><code class="language-sh">$ git add fie_name #添加单个文件
+$ git add . #当前目录下的所有文件
 </code></pre>
-<h2 id="docker">Docker</h2>
-<h3 id="安装">安装</h3>
-<pre><code class="language-shell"># 查找合适的版本
-$:yum list docker-ce --showduplicates | sort -r
-$:yum -y install docker-ce.x86_64
+<h1 id="commmit提交到本地仓库">commmit	提交到本地仓库</h1>
+<pre><code class="language-sh">$ git commit -m &quot;本次提交的说明&quot;
 </code></pre>
-<h3 id="启动">启动</h3>
-<pre><code class="language-shell">$:service docker start
+<h1 id="添加远程仓库地址">添加远程仓库地址</h1>
+<pre><code class="language-sh">$ git remote add origin url
 </code></pre>
-<h3 id="验证">验证</h3>
-<pre><code class="language-shell">$:docker -v
-Docker version 19.03.11, build 42e35e61f3
+<h1 id="删除远程地址">删除远程地址</h1>
+<pre><code class="language-sh">$ git remote rm origin #删除本地现存的远程地址
 </code></pre>
-<h2 id="docker-compose">docker-compose</h2>
-<h3 id="安装-2">安装</h3>
-<pre><code class="language-shell">$:yum -y install python3
-$:pip3 install docker-compose
+<h1 id="push推送">push	推送</h1>
+<pre><code class="language-sh">$ git push #默认推送本地master分支至远程master分支
+$ git push origin dev:dev #默认推送本地dev分支至远程dev分支
 </code></pre>
-<p>验证</p>
-<pre><code class="language-shell">$:docker-compose -v
-docker-compose version 1.25.5, build 8a1c60f6
+<p>#删远程分支</p>
+<pre><code class="language-sh">$ git push origin :master #删除master
+$ git push origin :dev #删除dev
+</code></pre>
+<h1 id="更新远程仓库地址">更新远程仓库地址</h1>
+<pre><code class="language-sh"># 方法一
+git remote set-url origin url
+# 方法二
+git remote rm origin
+git remote add origin url
+</code></pre>
+<h1 id="status查看项目当前状态">status	查看项目当前状态</h1>
+<pre><code class="language-sh">$ git status -s
+</code></pre>
+<h1 id="diff查看修改的内容">diff	查看修改的内容</h1>
+<pre><code class="language-sh">$ git diff file_name #fiel_name为要查看的文件名
+</code></pre>
+<h1 id="log查看历史记录">log	查看历史记录</h1>
+<pre><code class="language-sh">$ git log
+$ git log --pretty=oneline # 按照指定的格式输出
+</code></pre>
+<h1 id="reset回退版本">reset	回退版本</h1>
+<pre><code class="language-sh">$ git reset --hard xxx #版本的id
+$ git reset --hard HEAD~n #回退到上n版本
+</code></pre>
+<h1 id="reflog记录你每一次的操作命令">reflog	记录你每一次的操作命令</h1>
+<pre><code class="language-sh">$ git reflog 
+</code></pre>
+<h1 id="丢弃工作区的修改">丢弃工作区的修改</h1>
+<pre><code class="language-sh">$ git checkout --file
+</code></pre>
+<h1 id="rm从版本库中删除">rm	从版本库中删除</h1>
+<pre><code class="language-sh">$ git rm file_name
+</code></pre>
+<h1 id="reset取消缓存">reset	取消缓存</h1>
+<pre><code class="language-sh">$ git reset HEAD #HEAD为ID
+</code></pre>
+<h1 id="mv移动或重命名">mv	移动或重命名</h1>
+<pre><code class="language-sh">$ git mv
+</code></pre>
+<h1 id="查看所有分支">查看所有分支</h1>
+<pre><code class="language-sh">$ git branch -all
+</code></pre>
+<h1 id="创建分支">创建分支</h1>
+<pre><code class="language-sh">$ git branch dev
+#这个时候dev是一个本地分支，远程仓库不知道它的存在
+# 本地分支可以不同步到远程仓库，我们可以在dev开发，然后merge到master，使用master同步代码，当然也可以同步
+</code></pre>
+<h1 id="切换分支">切换分支</h1>
+<pre><code class="language-sh">$ git checkout dev  #切换到dev分支进行开发
+</code></pre>
+<h1 id="合并分支">合并分支</h1>
+<pre><code class="language-sh">$ git merge dev
+</code></pre>
+<p>删除本地分支</p>
+<pre><code class="language-sh">$ git branch -D dev #dev分支被删除
 </code></pre>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://wdm.life/tag/linux/" class="tag">
-                    Linux
+                  <a href="https://wdm.life/tag/git/" class="tag">
+                    git
                   </a>
                 
-                  <a href="https://wdm.life/tag/ming-ling/" class="tag">
-                    命令
+                  <a href="https://wdm.life/tag/cang-ku/" class="tag">
+                    仓库
                   </a>
                 
-                  <a href="https://wdm.life/tag/yun-wei/" class="tag">
-                    运维
-                  </a>
-                
-                  <a href="https://wdm.life/tag/an-zhuang/" class="tag">
-                    安装
-                  </a>
-                
-                  <a href="https://wdm.life/tag/pei-zhi/" class="tag">
-                    配置
-                  </a>
-                
-                  <a href="https://wdm.life/tag/6kHox7aHnJ/" class="tag">
-                    笔记
+                  <a href="https://wdm.life/tag/guan-li/" class="tag">
+                    管理
                   </a>
                 
               </div>
@@ -176,9 +213,9 @@ docker-compose version 1.25.5, build 8a1c60f6
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://wdm.life/post/ab-ya-li-ce-shi-xue-xi-bi-ji/">
+                <a href="https://wdm.life/post/windows/">
                   <h3 class="post-title">
-                    ab压力测试学习笔记
+                    Windows
                   </h3>
                 </a>
               </div>
