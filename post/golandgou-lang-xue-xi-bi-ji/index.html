@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1592751331523">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1593012320479">
 <link rel="stylesheet" href="https://wdm.life/styles/main.css">
 
 
@@ -29,13 +29,19 @@ Version
 $ go version
 go version go1.14.2 darwin/amd64
 
-Hello World
-//包名
-package main
+编写规则：
 
-//导入包
-import (
-	&quot;fmt&q..." />
+
+文件后缀为.go
+
+
+程序区分大小写
+
+
+语句后，不需要带分号
+
+
+定义的变量或import包，必须..." />
     <meta name="keywords" content="Go,Golang,学习,笔记,编程" />
   </head>
   <body>
@@ -45,7 +51,7 @@ import (
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://wdm.life">
-        <img src="https://wdm.life/images/avatar.png?v=1592751331523" class="site-logo">
+        <img src="https://wdm.life/images/avatar.png?v=1593012320479" class="site-logo">
         <h1 class="site-title">日&amp;月星辰</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -120,6 +126,171 @@ import (
 <pre><code class="language-sh">$ go version
 go version go1.14.2 darwin/amd64
 </code></pre>
+<h2 id="编写规则">编写规则：</h2>
+<ol>
+<li>
+<p>文件后缀为.go</p>
+</li>
+<li>
+<p>程序区分大小写</p>
+</li>
+<li>
+<p>语句后，不需要带分号</p>
+</li>
+<li>
+<p>定义的变量或import包，必须使用否则会报错</p>
+</li>
+<li>
+<p>每一个语句一行，否则会报错</p>
+</li>
+<li>
+<p>{}成对出现，而且风格为</p>
+<pre><code class="language-go">func main(){
+	//code
+}
+</code></pre>
+</li>
+</ol>
+<h2 id="变量">变量</h2>
+<p>声名语法：<strong>var 变量名 数据类型</strong></p>
+<p>备注：没有public、private等关键字来修饰，但可以简单的理解为<strong>首字母大写是公开的，首字母小写是私有的</strong></p>
+<ol>
+<li>
+<p>指定变量类型，声明后若不赋值，使用默认值</p>
+<pre><code class="language-go">package main
+import (
+	&quot;fmt&quot;
+)
+func main(){
+	var i int
+	fmt.Println(&quot;i的默认值为：&quot;,i)
+}
+</code></pre>
+</li>
+<li>
+<p>类型推导：根据值自行判定变量的类型</p>
+<pre><code class="language-go">package main
+import (
+	&quot;fmt&quot;
+)
+import (
+	&quot;fmt&quot;
+)
+func main(){
+	var num =8.8
+	fmt.Println(&quot;num的值为：&quot;,num)
+}
+</code></pre>
+</li>
+<li>
+<p>省略var，注意新的变量名不能为已经声明过的变量，否则会编译错误。</p>
+<pre><code class="language-go">package main
+import (
+	&quot;fmt&quot;
+)
+func main(){
+	name := &quot;wdm.life&quot;
+	fmt.Println(&quot;name的值为：&quot;,name)
+}
+</code></pre>
+</li>
+<li>
+<p>多变量声明</p>
+<pre><code class="language-go">package main
+import &quot;fmt&quot;
+func main(){
+	name,sex,old := &quot;wdm.life&quot;, &quot;男&quot;, 25
+	fmt.Println(&quot;姓名：&quot;,name,&quot;性别：&quot;,sex,&quot;年龄：&quot;,old)
+}
+</code></pre>
+</li>
+<li>
+<p>全局变量声明则放在函数外面即可</p>
+</li>
+<li>
+<p>Golang的变量如果没有赋初值，编译器会使用默认值,比如int 默认值0 string 默认值为空串, 小数默认为0</p>
+</li>
+</ol>
+<h2 id="类型转换">类型转换</h2>
+<pre><code>#string到int
+int,err:=strconv.Atoi(string)
+#string到int64
+int64, err := strconv.ParseInt(string, 10, 64)
+#int到string
+string:=strconv.Itoa(int)
+#int64到string
+string:=strconv.FormatInt(int64,10)
+</code></pre>
+<h2 id="string">string</h2>
+<ol>
+<li>
+<p>双引号，会识别转义字符</p>
+</li>
+<li>
+<p>反引号，以字符串原生形式输出，包括换行和特殊字符，可以实现防止攻击，输出源代码等效果</p>
+<pre><code class="language-go">str:=`
+package main
+import &quot;fmt&quot;
+func main(){
+	//code
+}
+`
+</code></pre>
+</li>
+<li>
+<p>多行字符串</p>
+<pre><code class="language-go">str:=&quot;name&quot;+
+&quot;sex&quot;
+</code></pre>
+<h3 id="类型转换-2">类型转换</h3>
+<p>基本语法：<strong>T(v)</strong> 将值v转换为类型T</p>
+<pre><code class="language-go">var i int32 =182
+var n2 float32=float32(i)
+</code></pre>
+<h3 id="基本类型转string类型">基本类型转string类型</h3>
+<ol>
+<li>fmt.Sprintf(“%参数”, 表达式)</li>
+</ol>
+<h3 id="string转基本类型">string转基本类型</h3>
+<p>使用strconv包函数</p>
+<pre><code class="language-go">var str string=&quot;true&quot;
+var b bool
+
+b,_=strconv.ParseBool(str)
+</code></pre>
+</li>
+</ol>
+<h2 id="指针">指针</h2>
+<ol>
+<li>基本数据类型，变量存的就是值，也叫值类型</li>
+<li>获取变量的地址，用&amp;，比如: var num int,获取num的地址: &amp;num分析一下基本数据类型在内存的布局.</li>
+<li>指针类型，指针变量存的是一个地址，这个地址指向的空间存的才是值比如: var ptr *int = &amp;num</li>
+<li>获取指针类型所指向的值，使用: *，比如: var ptr <em>int, 使用</em>ptr获取ptr指向的值</li>
+</ol>
+<h2 id="值类型和引用类型">值类型和引用类型</h2>
+<ol>
+<li>值类型:基本数据类型int 系列，float系列，bool, string、数组和结构体struct</li>
+<li>引用类型:指针、slice 切片、map、 管道chan、 interface 等都是引用类型</li>
+</ol>
+<p><strong>特点</strong></p>
+<p>​	值类型：变量直接存储值，内存通常在栈中分配</p>
+<p>​	引用类型：变量存储的是一个地址，这个地址对应的空间才真正存储数据(值)，内存通常在堆上分配，当没有任何变量引用这个地址时，该地址对应的数据空间就成为一个垃圾，由GC来回收</p>
+<h2 id="特别说明">特别说明</h2>
+<ol>
+<li>go明确不支持一三元运算符</li>
+<li>没有—a++a，只有a—a++</li>
+<li>嵌套分支不宜过多，建议控制在3层内</li>
+<li>在switch中fallthrough 默认只能穿透一层</li>
+</ol>
+<h2 id="原码-反码-补码">原码、反码、补码</h2>
+<ol>
+<li>二进制的最高位是符号位: 0表示正数,1表示负数</li>
+<li>正数的原码，反码，补码都一样</li>
+<li>负数的反码=它的原码符号位不变，其它位取反(0-&gt;1,1-&gt;0)</li>
+<li>负数的补码=它的反码+1</li>
+<li>0的反码，补码都是0</li>
+<li>在计算机运算的时候，都是以补码的方式来运算的</li>
+</ol>
 <h2 id="hello-world">Hello World</h2>
 <pre><code class="language-go">//包名
 package main
@@ -130,12 +301,25 @@ import (
 )
 //程序运行主函数
 func main() {
-	fmt.Println(&quot;Hello World&quot;)
+  fmt.Println(&quot;Hello World&quot;)
 }
 </code></pre>
 <p>执行命令，编译并运行程序</p>
-<pre><code class="language-shell">$ go run main.go
+<pre><code class="language-sh">$ go run main.go
 Hello World
+</code></pre>
+<h2 id="注释">注释</h2>
+<ol>
+<li>行注释</li>
+</ol>
+<pre><code class="language-go">//这是行注释
+</code></pre>
+<ol start="2">
+<li>块注释</li>
+</ol>
+<pre><code class="language-go">/*
+这是块注释
+*/
 </code></pre>
 <h2 id="test">Test</h2>
 <p>测试文件(xxx_test.go)必须与测试文件在同一目录下</p>
@@ -314,8 +498,7 @@ func setCookie(w http.ResponseWriter, r *http.Request) {
 <ol start="2">
 <li>获取</li>
 </ol>
-<pre><code class="language-go">
-// setCookie 添加Cookie
+<pre><code class="language-go">// setCookie 添加Cookie
 func setCookie(w http.ResponseWriter, r *http.Request) {
 	// 创建Cookie
 	cookie := http.Cookie{
@@ -406,16 +589,6 @@ func CheckAdminOldPwd(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-</code></pre>
-<h2 id="数据类型转换">数据类型转换</h2>
-<pre><code class="language-go">#string到int
-int,err:=strconv.Atoi(string)
-#string到int64
-int64, err := strconv.ParseInt(string, 10, 64)
-#int到string
-string:=strconv.Itoa(int)
-#int64到string
-string:=strconv.FormatInt(int64,10)
 </code></pre>
 <h2 id="jquery">Jquery</h2>
 <h4 id="性别转换">性别转换</h4>
