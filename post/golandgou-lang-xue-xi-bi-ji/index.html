@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1593094215246">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1593357034094">
 <link rel="stylesheet" href="https://wdm.life/styles/main.css">
 
 
@@ -51,7 +51,7 @@ go version go1.14.2 darwin/amd64
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://wdm.life">
-        <img src="https://wdm.life/images/avatar.png?v=1593094215246" class="site-logo">
+        <img src="https://wdm.life/images/avatar.png?v=1593357034094" class="site-logo">
         <h1 class="site-title">日&amp;月星辰</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -275,6 +275,1694 @@ b,_=strconv.ParseBool(str)
 <p><strong>特点</strong></p>
 <p>​	值类型：变量直接存储值，内存通常在栈中分配</p>
 <p>​	引用类型：变量存储的是一个地址，这个地址对应的空间才真正存储数据(值)，内存通常在堆上分配，当没有任何变量引用这个地址时，该地址对应的数据空间就成为一个垃圾，由GC来回收</p>
+<h2 id="包的使用">包的使用</h2>
+<ol>
+<li>
+<p>在给一个文件打包时，该包对应的一个文件夹，通常文件的包名跟文件所在的文件夹名一致，一般为小写字母</p>
+</li>
+<li>
+<p>当一个文件要使用其它包函数或变量时，需要先引入对应的包</p>
+<ol>
+<li>
+<pre><code class="language-go">import &quot;包名&quot;
+</code></pre>
+</li>
+<li>
+<pre><code class="language-go">import (
+	&quot;包名1&quot;
+	&quot;包名2&quot;
+)
+</code></pre>
+</li>
+<li>
+<p>package 指令在go文件的首行，然后是import指令</p>
+</li>
+<li>
+<p>import包时，路径从$GOPATH的src下开始，不需要带src，编译器会自动从src下开始引入</p>
+</li>
+</ol>
+</li>
+<li>
+<p>为了让其它包的文件，可以访问到本包的函数，则该函数名的首字母要大写，类似其它语言的pubilc</p>
+</li>
+<li>
+<p>在访问其它包函数或变量时，语法是：<strong>包名.函数名</strong></p>
+</li>
+<li>
+<p>如果包名较长，可以给包取别名。**注意：**取别名后，原来的包名就不能使用了。要使用别名来访问函数或变量</p>
+</li>
+<li>
+<p>在同一个包下不能有相同的函数名、变量名，否则报重复定义</p>
+</li>
+<li>
+<p>编译为可执行程序文件时，就需要将这个包声明为main，即package main。这个一个语法规范，如果你写一个库，包名可以自定义</p>
+</li>
+</ol>
+<h2 id="函数使用的细节">函数使用的细节</h2>
+<ol>
+<li>
+<p>函数的形参列表可以是多个，返回值列表也可以是多个。</p>
+</li>
+<li>
+<p>形参列表和返回值列表的数据类型可以是值类型和引用类型。</p>
+</li>
+<li>
+<p>函数的命名遵循标识符命名规范，首字母不能是数字，首字母大写该函数可以被本包文件和其它包文件使用，类似public,首字母小写，只能被本包文件使用，其它包文件不能使用，类似privat</p>
+</li>
+<li>
+<p>函数中的变量是局部的，函数外不生效</p>
+</li>
+<li>
+<p>基本数据类型和数组默认都是值传递，即进行值拷贝。在函数内修改，不会影响到原来的值</p>
+</li>
+<li>
+<p>如果希望函数内的变量能修改函数外的亦是，可以通过传入变量的地址&amp;，函数内以指针的方式操作变量</p>
+</li>
+<li>
+<p>Go不支持函数重载</p>
+</li>
+<li>
+<p>在Go中，函数也是一种数据类型，可能赋值给一个变量，则该变量就是一个函数的变量了。通过该变量可以对函数调用</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func getSum(num1 int, num2 int) int {
+	return num1 + num2
+}
+func main() {
+	biov := getSum
+	fmt.Printf(&quot;biov的类型%T,getSum类型是%T\n&quot;, biov, getSum)
+	result := biov(3, 7)
+	fmt.Println(&quot;result=&quot;, result)
+}
+</code></pre>
+</li>
+<li>
+<p>函数既然是一种数据类型，因此在Go中，函数可能作为形参且调用</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	result := myfun(getSum, 3, 7)
+	fmt.Println(&quot;result=&quot;, result)
+}
+
+func myfun(funvar func(int, int) int, num1 int, num2 int) int {
+	return funvar(num1, num2)
+}
+
+func getSum(num1 int, num2 int) int {
+	return num1 + num2
+}
+
+</code></pre>
+</li>
+<li>
+<p>为了简化数据类型定义，Go支持自定义数据类型</p>
+<p>基本语法为：type	自定义数据类型名	数据类型	//相当于一个别名</p>
+<pre><code class="language-go">type myInt int
+</code></pre>
+</li>
+<li>
+<p>支持函数返回值命名</p>
+<pre><code class="language-go">func getSumAndSub(n1 int,n2 int) (sum int,sub int){
+	sum = n1 + n2
+	sub = n1 - n2
+	return
+}
+</code></pre>
+</li>
+<li>
+<p>使用 _ 标识符，忽略返回值</p>
+</li>
+<li>
+<p>支持可变参数</p>
+<pre><code class="language-go">// 0~n个参数
+func sum(args... int)sum int{
+}
+// 1~n个参数
+func sum(n1 int,args... int)sum int{
+}
+</code></pre>
+<p>说明：</p>
+<ol>
+<li>
+<p>args是slice切片，通过args[index]可以访问到各个值</p>
+</li>
+<li>
+<p>如果一个函数的形参中有可变参数，则可变参数需要放在在形参列表最后</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	result := sum(1, 2, 3, 4, 5, 6, 7, 8, 9)
+	fmt.Println(&quot;result=&quot;, result)
+}
+
+func sum(n1 int, args ...int) int {
+	sum := n1
+	for i := 0; i &lt; len(args); i++ {
+		sum += args[i]
+	}
+	return sum
+}
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="init函数">init函数</h2>
+<h3 id="介绍">介绍</h3>
+<p>每一个源文件都可以包含一个init函数，该函数会在main函数执行前，被Go运行框架调用，换一个说法就是init会在main函数前先被执行</p>
+<h3 id="细节"><strong>细节</strong></h3>
+<pre><code>1. 如果一个文件同时包含全局变量定义，init函数各main函数，则执行的流程：**全局变量定义-&gt;init函数-&gt;main函数**
+2. init函数最主要的作用是完成一些初始化的工作
+</code></pre>
+<h2 id="匿名函数">匿名函数</h2>
+<h3 id="介绍-2">介绍</h3>
+<p>没有名字的函数就是匿名函数，某个函数只使用一次时可以考虑使用匿名函数，它也可以实现多次调用。</p>
+<p>使用方式1</p>
+<pre><code class="language-go">func main(){
+	result :=func (n1 int, n2 int)int{
+		result n1 + n2
+	}(3,7)
+	
+	fmt.Println(&quot;result=&quot;,result)
+}
+</code></pre>
+<p>使用方式2</p>
+<pre><code class="language-go">func main(){
+  a := func (n1 int, n2 int)int {
+    return n1 - n2
+  }
+  result :=a(3, 7)
+  fmt.Println(&quot;result=&quot;,result)
+  result2 :=a(3, 7)
+  fmt.Println(&quot;result=&quot;,result2)
+}
+</code></pre>
+<h3 id="全局匿名函数">全局匿名函数</h3>
+<p>如果将匿名函数赋给一个全局变量，那么这个匿名函数，就成为一个全局匿名函数</p>
+<h2 id="闭包">闭包</h2>
+<h3 id="介绍-3">介绍</h3>
+<p>一个函数和与其相关的引用环境组合的一个整体（实体）</p>
+<h3 id="案例">案例</h3>
+<pre><code class="language-go">func AddUpper() func (int)int{
+	var n int = 10 
+	return func (x int) int{
+		n = n + x
+		return n
+	}
+}
+
+func main(){
+	f := AddUpper()
+	fmt.Println(f(1))
+}
+</code></pre>
+<ol>
+<li>
+<p>AddUpper 是一个函数，返回的数据类型是fun（int) int</p>
+</li>
+<li>
+<p>闭包说明</p>
+<pre><code class="language-go">var n int = 10 
+	return func (x int) int{
+		n = n + x
+		return n
+	}
+</code></pre>
+<p>返回的是一个匿名函数，但是这个匿名函数引用到函数外的n，因此这个艾薇儿函数就和n形成一个整体，构成闭包</p>
+</li>
+<li>
+<p>简单理解为：闭包是类，函数是操作，n是字段。函数和它使用到n构成闭包</p>
+</li>
+<li>
+<p>当我们反复的调用f函数时，因为n是初始化一次，因此每骼一次不进行累计</p>
+</li>
+<li>
+<p>我们要搞清楚闭包的关键，就是要分析出返回的函数它使用（引用）到哪些变量，因为函数和它引用到的变量共同构成闭包</p>
+</li>
+</ol>
+<h3 id="闭包最佳实践">闭包最佳实践</h3>
+<p>要求如下：</p>
+<ol>
+<li>
+<p>编写一个函数 makeSuffix(suffix string)	可以接收一个文件后缀名（比如.jpg)，并返回一个闭包</p>
+</li>
+<li>
+<p>调用闭包，可以传入一个文件名，如果该文件名没有指定的后缀（如.jpg），则返回 文件名.jpg，如果已经有.jpg后缀，则返回原文件名</p>
+</li>
+<li>
+<p>要求使用闭包的方式完成</p>
+</li>
+<li>
+<p>strings.HasSuffix，该函数可以判断某个字符串是否有指定的后缀</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;strings&quot;
+)
+
+func main() {
+	f2 := makeSuffix(&quot;.jpg&quot;)
+	fmt.Println(&quot;文件名处理后=&quot;, f2(&quot;eeedsss&quot;))
+	fmt.Println(&quot;文件名处理后=&quot;, f2(&quot;wdm.life&quot;))
+	fmt.Println(&quot;文件名处理后=&quot;, f2(&quot;wdm.jpg&quot;))
+}
+
+func makeSuffix(suffix string) func(string) string {
+	return func(xx string) string {
+		if !strings.HasSuffix(xx, suffix) {
+			return xx + suffix
+		}
+		return xx
+	}
+}
+</code></pre>
+<p>上面代码的总结与说明：</p>
+<ol>
+<li>返回的匿名函数和makeSuffix(suffix string) 	的	suffix	变量	组合成一个闭包，因为返回的函数引用到suffix这个变量</li>
+<li>我们体会一下闭包的好处，如果使用传统的方法，也可以轻松实现这个功能，但是传统方法需要每次都传入后缀名，比如.jpg，而闭包因为可以保留上次引用的某个值，所以我们传入一次就可以反复使用</li>
+</ol>
+</li>
+</ol>
+<h2 id="defer函数">defer函数</h2>
+<h3 id="干啥用呢">干啥用呢</h3>
+<p>在函数中，程序员经常需要创建资源（比如：数据库连接。文件句柄、锁等），为了在函数执行完毕后，及时的释放资源，Go的设计者提供defer（延时机制）</p>
+<h3 id="细节-2">细节</h3>
+<ol>
+<li>
+<p>当Go执行到一个defer时，不会立即执行defer后的语句，而是将defer后的语句压入到一个栈中</p>
+</li>
+<li>
+<p>当函数执行完毕后，再从defer栈中，依次从栈顶取出语句执行（注：遵守栈的先入后出的机制）</p>
+</li>
+<li>
+<p>在defer将语句放入到栈时，也会将相关的值拷贝同时入栈。</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	result := sum(3, 7)
+	fmt.Println(&quot;result=&quot;, result)
+}
+
+func sum(n1 int, n2 int) int {
+	//当执行到defer时，暂时不执行，会将defer后面的语句压入到独立的栈(defer栈)
+	//当函数执行完毕后，再从defer栈， 按照先入后出的方式出栈，执行
+	defer fmt.Println(&quot;ok1 n1=&quot;, n1) //defer 3. ok1 n1 = 10
+	defer fmt.Println(&quot;ok2 n2=&quot;, n2) //defer 2. ok2 n2= 20
+	//增加一句话
+	n1++
+	//n1=11
+	n2++
+	res := n1 + n2
+	fmt.Println(&quot;ok3 res=&quot;, res) // 1. ok3 res= 32
+	return res
+}
+</code></pre>
+</li>
+</ol>
+<h3 id="其它说明">其它说明</h3>
+<ol>
+<li>创建资源后，比如打开了文件，获取了数据库的链接，或者是锁资源，可以执行defer fiel.close()defer connect.Close()</li>
+<li>在defer后，可以继续使用创建资源</li>
+<li>当函数执行完毕后，系统会依次从defer栈中，取出语句关闭资源</li>
+<li>这种机制非常简洁，程序员不用再为在什么时机关闭资源而烦恼</li>
+</ol>
+<h2 id="函数参数传递方式">函数参数传递方式</h2>
+<p>两种传递方式</p>
+<ol>
+<li>值传递</li>
+<li>引用传递</li>
+</ol>
+<p>其实，不管是值传递还是引用传递，传递给函数的都是变量的副本，不同的是，值传递的是值的拷贝，引用传递的是地址的拷贝，一般来说，地址拷贝效率高，因为数据量小，而值拷贝决定拷贝的数据大小，数据越大，效率越低。</p>
+<h2 id="时间">时间</h2>
+<p><strong>方式1</strong> 格式化输出的时间是固定的**”2006-01-02 15:04:05”**</p>
+<pre><code class="language-go">fmt.Printf(now.Format(&quot;2006-01-02 15:04:05&quot;))
+fmt.Printf(now.Format(&quot;2006-01-02&quot;))
+fmt.Printf(now.Format(&quot;15:04:05&quot;))
+</code></pre>
+<p><strong>方式2</strong></p>
+<pre><code class="language-go">fmt.Printf(&quot;当前时间是 %d-%d-%d- %d:%d:%d \n&quot;,now.Year(),now.Month(),now.Day(),now.Hour(),now.Minute(),now.Second())
+</code></pre>
+<p>时间的常量</p>
+<pre><code class="language-go">const(
+	Nanosecond Duration = 1//纳秒
+	Microsecond 				= 1000 * Microsecond //微秒
+	Millisecond					=1000 * Microsecond //毫秒
+	Second							=1000 * Millisecond //秒
+	Minute							=60 * Second //分钟
+	Hour								=60 * Minute //小时
+)
+</code></pre>
+<h2 id="内置函数">内置函数</h2>
+<ol>
+<li>len 用来求长度，如string、array、slice、map、channel</li>
+<li>new 用来分配内存，主要用来分配值类型，比如int、float32、struct……返回的是指针</li>
+<li>make 用来分配内存，主要用来分配引用类型，比如chnnel、map、slice、</li>
+</ol>
+<h2 id="错误处理">错误处理</h2>
+<ol>
+<li>在默认的情况下，当发生错误后（panic），程序就会退出（崩溃）</li>
+<li>我们希望当发生错误后，可以捕获到错误，并进行处理，保证程序可以继续执行。还可以在捕获到错误后给我们一个提示</li>
+</ol>
+<h3 id="自定义错误">自定义错误</h3>
+<ol>
+<li>errors.New(“错误说明”)，会返回一个error类型的值，表示一个错误</li>
+<li>panic内置函数，接收一个interface{}类型的值（任何值）作为参数。可以接收error类型的变量，输出错误信息，并退出程序</li>
+</ol>
+<h2 id="数组与切片">数组与切片</h2>
+<h3 id="数组的定义">数组的定义</h3>
+<p>var 数组名 [数组大小]数据类型；如var a [5]int</p>
+<p>赋值 a[0] = 1 a[2]=3……</p>
+<p>数组初始化的方式</p>
+<pre><code class="language-go">var numArr01 [3]int =[3]int{1,2,3}
+
+var numArr02 =[3]int{4,5,6}
+
+var numArr03 =[...]int{1:11,2:222,3:333}
+
+numArr04 :=[...]string{1:&quot;11&quot;,2:&quot;222&quot;,3:&quot;333&quot;}
+</code></pre>
+<h3 id="数组的遍历">数组的遍历</h3>
+<pre><code class="language-go">for k,v := range numArr01{
+	fmt.Println(k,&quot;:&quot;v)
+}
+
+for _,v := range numArr01{
+	fmt.Println(v)
+}
+</code></pre>
+<h3 id="数组使用的注意事项和细节">数组使用的注意事项和细节</h3>
+<ol>
+<li>
+<p>数组是多个相同类型数据的组合，一个数组一旦声明/定义了，其长度是固定的，不能动态变化</p>
+</li>
+<li>
+<p>var arr []int 这个arr 就是一个slice切片</p>
+</li>
+<li>
+<p>数组中的元素可以是任何数据类型，包括类型和引用类型，但是不能混用</p>
+</li>
+<li>
+<p>数组创建后，如果没有赋值，有默认值（零值）</p>
+<p>数值类型数组：0</p>
+<p>字符串数组：“”</p>
+<p>bool数组：false</p>
+</li>
+<li>
+<p>使用数组的步骤：1. 声明数组并开辟空间 2. 给数组各个元素赋值 3. 使用数组</p>
+</li>
+<li>
+<p>数组的下标是从0开始的</p>
+</li>
+<li>
+<p>数组下标必须在指定范围内使用，否则报panic：数组越界，如：var arr[5]int 则有效下标为0-4</p>
+</li>
+<li>
+<p>数组属值类型，在默认情况下是值传递，因此会进行值拷贝。数组间不会影响</p>
+</li>
+<li>
+<p>如想在其它函数中，去修改原来的数组，可以使用引用传递（指针方式）</p>
+<pre><code class="language-go">func test01(arr *[3]int){
+	(*arr)[0] = 88
+}
+</code></pre>
+</li>
+<li>
+<p>长度是数组类型的一部分，在传递函数参数时需要考虑数组的长度</p>
+</li>
+</ol>
+<h3 id="切片">切片</h3>
+<h4 id="基本介绍">基本介绍</h4>
+<ol>
+<li>
+<p>切片的英文是slice</p>
+</li>
+<li>
+<p>切片是数组的一个引用，因此<strong>切片是引用类型</strong>，在进行传递时，遵守引用传递的机制</p>
+</li>
+<li>
+<p>切片的<font color=red>使用和数组类似</font>，遍历切片、访问切片的元素和求切片长度len（slice）都一样</p>
+</li>
+<li>
+<p>切片的长度是可以变化的，因此切片是一个可以动态变化数组</p>
+</li>
+<li>
+<p>切片定义的基本语法：</p>
+<p>var 切片名 []类型	如：var a[]int</p>
+<pre><code class="language-go">func main() {
+	var intArr [6]int = [...]int{1, 22, 33, 66, 99, 88}
+	slice := intArr[1:3]
+	fmt.Println(&quot;intArr=&quot;, intArr)
+	fmt.Println(&quot;slice 的元素是 =&quot;, slice)
+	fmt.Println(&quot;slice 的元素个数 =&quot;, len(slice))
+	fmt.Println(&quot;slice 的容量 =&quot;, cap(slice))
+}
+</code></pre>
+</li>
+<li>
+<p>使用</p>
+<ol>
+<li>
+<p>定义一个切片，然后让切片去引用一个已经创建好的数组，比如：</p>
+<pre><code class="language-go">func main() {
+	var intArr [6]int = [...]int{1, 22, 33, 66, 99, 88}
+	slice := intArr[1:3]
+	fmt.Println(&quot;intArr=&quot;, intArr)
+	fmt.Println(&quot;slice 的元素是 =&quot;, slice)
+	fmt.Println(&quot;slice 的元素个数 =&quot;, len(slice))
+	fmt.Println(&quot;slice 的容量 =&quot;, cap(slice))
+}
+</code></pre>
+</li>
+<li>
+<p>通过make来创建切片</p>
+<p>基本语法：var 切片名 []type = make([]type,len,[cap])</p>
+<p>参数说明：type：数据类型 len：大小 cap：指定切片容量，<strong>可选，如果你分配了cap，则要求vap&gt;=len</strong></p>
+<ol>
+<li>通过make方式创建切片可以指定切片的大小和容量</li>
+<li>如果没有给切片的各个元素赋值，那么就会使用默认值[int, float=&gt;0 string=&gt;”” bool=&gt;false]</li>
+<li>通过make方式创建的切片对应的数组是由make底层维护，对外不可见即只能通过slice去访问各个元素</li>
+</ol>
+</li>
+<li>
+<p>定义一个切片，直接就指定具体数据，使用原理类似make的方式</p>
+</li>
+</ol>
+<p>1和2的区别：1是直接引用数组，这个数组是事先存在的程序员是可见的；2是通过make来创建切片，make也会创建一个数组，是由切片在底层进行维护，程序员是不见的</p>
+<h4 id="遍历">遍历</h4>
+<ol>
+<li>
+<p>for循环是常规方式遍历</p>
+</li>
+<li>
+<p>for-range结构遍历切片</p>
+<pre><code class="language-go">func main(){
+	var arr [5]int = [...]int{1,2,3,4,5}
+	slice := arr[1:4]
+	for i := 0; i &lt; len(slice); i++{
+		fmt.Printlf(&quot;slice[%v]=%v &quot;,i,slice[i])
+	}
+	fmt.Println()
+	//推荐使用这个方式
+	for i, v := range slice{
+		fmt.Printlf(&quot;slice[%v]=%v \n&quot;,i,v)
+	}
+}
+</code></pre>
+</li>
+</ol>
+<h4 id="切片使用的注意事项和细节讨论">切片使用的注意事项和细节讨论</h4>
+<ol>
+<li>
+<p>切片初始化时 var slice = arr[startIndex:endIndex]；说明：从arr数组下标为startIndex，取下下标为endIndex的元素（不含arr[endIdex]）</p>
+</li>
+<li>
+<p>切片初始化时，仍然不能越界。范围在[0~len(arr)]之间，但是可以动态增长</p>
+<p>var slice = arr[0:end] 可以简写 var slice =arr[:end]</p>
+<p>var slice  = arr[start:len(arr)] 可以简写 var slice = arr[start:]</p>
+<p>var slice = arr[0:len(arr)] 可以简写 var slice = arr[:]</p>
+</li>
+<li>
+<p>cap是一个内置函数，用于统计切片的容量，即最大可以存放多少个元素</p>
+</li>
+<li>
+<p>切片定义后，还不能使用，因为本身是个空的，需要让其引用到一个数组，或者make一个空间供切片来使用</p>
+</li>
+<li>
+<p>切片可以继续切片</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	var arr [5]int = [...]int{1, 2, 3, 4, 5}
+	slice := arr[1:4]
+	//使用常规的for遍历切片
+	for i := 0; i &lt; len(slice); i++ {
+		fmt.Printf(&quot;slice[%v]=%v &quot;, i, slice[i])
+	}
+	fmt.Println()
+	//使用for-range 遍历切片
+	for i, v := range slice {
+		fmt.Printf(&quot;i=%v v=%v \n&quot;, i, v)
+	}
+
+	slice2 := slice[1:2]
+	//因为arr, slice 和slice2 指向的数据空间是同一个，因此slice[0]=100
+	slice2[0] = 100
+
+	fmt.Println(&quot;slice2= &quot;, slice2)
+	fmt.Println(&quot;slice= &quot;, slice)
+	fmt.Println(&quot;arr= &quot;, arr)
+}
+</code></pre>
+</li>
+<li>
+<p>用append内置函数，可以对切片进行动态追加</p>
+<pre><code class="language-go">var slice3 []int= []int{1, 2, 3}
+slice3 = append(slice3, 4, 5, 6)
+fmt.Println(&quot;slice3&quot;, slice3)
+slice3 = append(slice3,slice3...)
+fmt.Println(&quot;slice3&quot;, slice3)
+</code></pre>
+<p>分析：</p>
+<ol>
+<li>切片append操作的本质就是对数组扩容</li>
+<li>go底层会创建一个新的数组newArr（安装扩容后大小）</li>
+<li>将slice原来包含的元素拷贝到新的数组newArr</li>
+<li>slice重要引用到newArr</li>
+</ol>
+</li>
+<li>
+<p>切片的拷贝操作</p>
+<pre><code class="language-go">var slice4 []int = []int{1,2,4,5}
+var slice5 = make([]int,10)
+copy(slice5,slice4)
+fmt.Println(&quot;slice4=&quot;,slice4)
+fmt.Println(&quot;slice5=&quot;,slice5)
+</code></pre>
+<ol>
+<li>copy(para1,para2)参数的数据类型是切片</li>
+<li>按照上面的代码来看，slice4和slice5的数据空间是独立，相互不影响，就是说slice4[0]=999,slice5[0]仍然是 1</li>
+</ol>
+</li>
+<li>
+<p>拷贝注意事项</p>
+<pre><code class="language-go">var a []int = []int{1,2,3,4,5}
+var slice = make([]int, 1)
+fmt.Println(slice) //[0]
+copy(clise,a)
+fmt.Println(slice)//[1]
+</code></pre>
+</li>
+<li>
+<p>切片是引用类型，所以在传递时，遵守引用传递机制。</p>
+<p>案例：斐波那契的数列</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func fbn(n int) []uint64 {
+  //声明一个切片，大小为n
+	fbnSlice := make([]uint64, n)
+	fbnSlice[0] = 1
+	fbnSlice[1] = 1
+	for i := 2; i &lt; n; i++ {
+		fbnSlice[i] = fbnSlice[i-1] + fbnSlice[i-2]
+	}
+	return fbnSlice
+}
+func main() {
+	fbnSlice := fbn(20)
+	fmt.Println(&quot;fnbSlice=&quot;, fbnSlice)
+}
+</code></pre>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="排序与查找">排序与查找</h2>
+<h3 id="基本介绍-2">基本介绍</h3>
+<p>排序是将一组数据，依指定的顺序进行排列的过程</p>
+<p>分类</p>
+<ol>
+<li>内部排序：指将要处理的所有数据都加载到内部存储器中进行排序，包括（<font color=red>交换式排序法、选择式排序法和插入式排序法</font>）</li>
+<li>外部排序法：数据量过大，无法全部加载到内存中，需要借助外部存储进行排序。包括（<font color=red>合并排序法和直接合并排序法</font>）</li>
+</ol>
+<h3 id="冒泡排序">冒泡排序</h3>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	arr := [5]int{22, 21, 67, 34, 2}
+	BubbleSort(&amp;arr)
+
+}
+
+// 冒泡排序
+func BubbleSort(arr *[5]int) {
+	fmt.Println(&quot;排序前arr=&quot;, arr)
+	tem := 0
+	for i := 0; i &lt; len(*arr)-1; i++ {
+
+		for j := 0; j &lt; len(*arr)-1-i; j++ {
+			if (*arr)[j] &gt; (*arr)[j+1] {
+				// 交换
+				tem = (*arr)[j]
+				(*arr)[j] = (*arr)[j+1]
+				(*arr)[j+1] = tem
+			}
+		}
+	}
+	fmt.Println(&quot;排序后arr=&quot;, arr)
+}
+</code></pre>
+<h3 id="查找">查找</h3>
+<ol>
+<li>
+<p>顺序查找</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	names := [4]string{&quot;小明&quot;, &quot;小东&quot;, &quot;小李&quot;, &quot;李华&quot;}
+
+	var heroName = &quot;&quot;
+	fmt.Println(&quot;请输入你要查找的人名……&quot;)
+	fmt.Scanln(&amp;heroName)
+	// 顺序查找
+	for i := 0; i &lt; len(names); i++ {
+		if heroName == names[i] {
+			fmt.Print(&quot;找到%v , 下标%v \n&quot;, heroName, i)
+			break
+		} else if i == (len(names) - 1) {
+			fmt.Println(&quot;没有找到%v \n&quot;, heroName)
+		}
+	}
+}
+</code></pre>
+</li>
+<li>
+<p>二分查找（该数组是有序）</p>
+<pre><code class="language-go">/* 思路
+查找的数是 findVal
+1. arr是一个有序的数组，并且是从小到大排序
+2. 先找到中间的下标 middle = （leftIndex + rightIndex)/2,然后让中间下标的值和findVal进行比较
+2.1 如果arr[middle] &gt; findVal， 就应该向 leftIndex --- (middle -1)
+2.2 如果arr[middle] &lt; findVal， 就应该向 middl+1 --- rightInde
+2.3 arr[middle] == findVal， 就找到了
+3. 当leftIndex &gt; rightIndex 的情况下就说明找不到了。退出循环
+*/
+
+package main
+
+import &quot;fmt&quot;
+
+func main() {
+	arr := [6]int{1, 2, 3, 4, 5, 6}
+	BinarFind(&amp;arr, 0, len(arr)-1, 6)
+
+}
+func BinarFind(arr *[6]int, leftIndex int, rightIndex int, findVal int) {
+	// 判断leftIndex 是否大于 rightIndex
+	if leftIndex &gt; rightIndex {
+		fmt.Println(&quot;找不到&quot;)
+		return
+	}
+	// 先找到 中间的下标
+	middle := (leftIndex + rightIndex) / 2
+
+	if (*arr)[middle] &gt; findVal {
+		// 说明我们要查找的数，应该在 leftIndex --middle-1
+		BinarFind(arr, leftIndex, middle-1, findVal)
+	} else if (*arr)[middle] &lt; findVal {
+		// 说明我们要查找的数，应该在 middle+1 --rightIndex
+		BinarFind(arr, middle+1, rightIndex, findVal)
+	} else {
+		fmt.Printf(&quot;找到了，下标为%v \n&quot;, middle)
+	}
+}
+</code></pre>
+</li>
+</ol>
+<h2 id="二维数组">二维数组</h2>
+<h3 id="语法">语法</h3>
+<p>var 数组名 [大小] [大小]类型；</p>
+<p>如</p>
+<pre><code class="language-go">var arr [2][3]int 
+</code></pre>
+<h3 id="初始化">初始化</h3>
+<pre><code class="language-go">var arr [2][3]int = [2][3]int{{1,2,3},{4,5,6}}
+</code></pre>
+<h3 id="遍历-2">遍历</h3>
+<p>for</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	var arr = [2][3]int{{1, 2, 3}, {4, 5, 6}}
+	for i := 0; i &lt; len(arr); i++ {
+		for j := 0; j &lt; len(arr[i]); j++ {
+			fmt.Printf(&quot;%v\t&quot;, arr[i][j])
+		}
+		fmt.Println()
+	}
+}
+</code></pre>
+<p>for-range</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	var arr = [2][3]int{{1, 2, 3}, {4, 5, 6}}
+	for k, v := range arr {
+		for j, v2 := range v {
+			fmt.Printf(&quot;arr[%v][%v]=%v\t&quot;, k, j, v2)
+		}
+	}
+	fmt.Println()
+}
+</code></pre>
+<h2 id="map">map</h2>
+<h3 id="介绍-4">介绍</h3>
+<p>map 是 key-value 数据结构，又称为字段或者关联数组。类似其它编程语言的集合，在编程中经常使用到</p>
+<h3 id="声明">声明</h3>
+<h4 id="语法-2">语法</h4>
+<p>var map 变量名 make [keytpe]valuetype；</p>
+<p>go中的map的key可以是很多种类型，比如bol，数字，string，指针，channel，还可以是只包含前面几个类型的接口结构体，数组</p>
+<p><strong>通常key为int、string</strong></p>
+<p>**注意：**slice，map 还有function不可以，因为几个没有用 == 来判断</p>
+<p>valuetype 的类型和key基本一样，通常为：数字（整数，浮点数），string，map，struct</p>
+<p><strong>声明</strong>是不会分配内存的，初始化需要make，分配内存才能赋值和使用</p>
+<p>案例</p>
+<pre><code class="language-go">a = make(map[string][string],10)
+a[&quot;no1&quot;]=&quot;梨花&quot;
+a[&quot;no2&quot;]=&quot;桃子&quot;
+a[&quot;no3&quot;]=&quot;武松&quot;
+</code></pre>
+<p>说明：</p>
+<ol>
+<li>map 在使用前一定要make</li>
+<li>map 的 key 是不能重复，如果重复了，则以最后这个 key-value 为准</li>
+<li>map 的value 是可以相同的</li>
+<li>map 的key-value 是无序</li>
+<li>make  内置函数数目</li>
+</ol>
+<h3 id="使用">使用</h3>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	//方式1
+	var a map[string]string
+	a = make(map[string]string, 10)
+	a[&quot;no1&quot;] = &quot;梨花&quot;
+	a[&quot;no2&quot;] = &quot;桃子&quot;
+	a[&quot;no3&quot;] = &quot;武松&quot;
+
+	//方式2
+	cities := make(map[string]string)
+	cities[&quot;no1&quot;] = &quot;广西&quot;
+	cities[&quot;no2&quot;] = &quot;广州&quot;
+	cities[&quot;no3&quot;] = &quot;上海&quot;
+
+	//方式3
+	heroes := map[string]string{
+		&quot;no1&quot;: &quot;广西&quot;,
+		&quot;no2&quot;: &quot;广州&quot;,
+		&quot;no3&quot;: &quot;上海&quot;,
+	}
+	fmt.Println(heroes)
+}
+</code></pre>
+<h3 id="增删改查">增删改查</h3>
+<p>map[“key”] = value ;如果key不存在就是增加，已存在就是修改</p>
+<p>**删除：**delete(mapName,”key”)，delete是一个内置函数，如果存在就删除该key-value，如果key不存在不操作，但 是也不会报错。</p>
+<p><strong>查找</strong></p>
+<pre><code class="language-go">val, ok := cities[&quot;no2&quot;]
+if ok {
+	fmt.Println(“存在”)
+}else {
+	fmt.Println(&quot;不存在&quot;)
+}
+</code></pre>
+<h3 id="遍历-3">遍历</h3>
+<p>说明：map 的遍历使用for-range的结构遍历</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	cities := make(map[string]string)
+	cities[&quot;no1&quot;] = &quot;广西&quot;
+	cities[&quot;no2&quot;] = &quot;广州&quot;
+	cities[&quot;no3&quot;] = &quot;上海&quot;
+
+	for k, v := range cities {
+		fmt.Printf(&quot;k=%v v=%v \n&quot;, k, v)
+	}
+}
+</code></pre>
+<h2 id="map切片">map切片</h2>
+<p>切片的数据类型是map，则我们称为 slice of map，map切片，这样使用则map个数就可以动态变化了</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	var mosters []map[string]string
+	mosters = make([]map[string]string, 2)
+	if mosters[0] == nil {
+		mosters[0] = make(map[string]string, 2)
+		mosters[0][&quot;name&quot;] = &quot;老牛&quot;
+		mosters[0][&quot;age&quot;] = &quot;500&quot;
+	}
+	if mosters[1] == nil {
+		mosters[1] = make(map[string]string, 2)
+		mosters[1][&quot;name&quot;] = &quot;玉兔精&quot;
+		mosters[1][&quot;age&quot;] = &quot;400&quot;
+	}
+	fmt.Println(mosters)
+}
+</code></pre>
+<h3 id="map排序">map排序</h3>
+<ol>
+<li>
+<p>go 中没有一个专门的方法针对map的key进行排序</p>
+</li>
+<li>
+<p>go 中的map默认是无序的，<strong>注意</strong>也不是按照添加的顺序存放的，每次遍历输出的顺序可能不一样</p>
+</li>
+<li>
+<p>go 中map的排序是先将key进行排序，然后根据key值遍历输出即可</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;sort&quot;
+)
+
+func main() {
+	map1 := make(map[int]int, 10)
+	map1[10] = 100
+	map1[1] = 11
+	map1[2] = 12
+	map1[4] = 44
+	map1[9] = 66
+	fmt.Println(map1)
+	var keys []int
+	for k, _ := range map1 {
+		keys = append(keys, k)
+	}
+	sort.Ints(keys)
+	fmt.Println(keys)
+	for _, k := range keys {
+		fmt.Printf(&quot;map[%v]=%v \n&quot;, k, map1[k])
+	}
+}
+</code></pre>
+</li>
+</ol>
+<p>细节：</p>
+<ol>
+<li>map 是引用类型，遵守引用类型传递的机制，在一个函数接收map修改后会直接修改原来的map</li>
+</ol>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func modify(map1 map[int]int) {
+	map1[10] = 800
+}
+func main() {
+	map1 := make(map[int]int)
+	map1[1] = 90
+	map1[2] = 88
+	map1[3] = 33
+	map1[10] = 10
+	modify(map1)
+
+	fmt.Println(map1)
+}
+</code></pre>
+<ol start="2">
+<li>map 的容量达到后，再想增加元素会自动扩容，并不会发生panic，也就说明map能动态的增长 键值对(key-value)</li>
+<li>mao 的 value 也经常使用<font color=red><strong>struct类型</strong></font>，更适合管理复杂的数据（比前面value是一个map更好），比如 value 为Student的结构体</li>
+</ol>
+<h2 id="结构体">结构体</h2>
+<h3 id="基本语法">基本语法</h3>
+<pre><code class="language-go">type 结构体名称 struct{
+	field1 type
+	field2 type
+}
+</code></pre>
+<p>案例</p>
+<pre><code class="language-go">type Student struct{
+	Name string
+	Age int
+	Score float32
+}
+</code></pre>
+<p><strong>说明：结构体是值类型</strong></p>
+<h3 id="创建与访问">创建与访问</h3>
+<ol>
+<li>直接声明</li>
+</ol>
+<p>var persion Psersion</p>
+<ol start="2">
+<li>
+<p>{}</p>
+<p>var persion Persion = Persion{}</p>
+</li>
+<li>
+<p>-&amp;</p>
+<p>var persion *Persion =new (Persion)</p>
+</li>
+<li>
+<p>-{}</p>
+<p>var persion *Persion = &amp;Persion{}</p>
+</li>
+</ol>
+<p>说明：</p>
+<ol>
+<li>3和4返回的 <strong>结构体</strong></li>
+<li>结构体指针访问字段的标准方式应该是：(*结构体指针).字段名，比如(*persion).Name = “tom”</li>
+<li>但go做了一个简化，<font color=red>也支持 结构体.字段名</font>，比如 persion.Name = “tom”。更加符合程序员使用的习惯，<font color=red>go编译器底层 对 persion.Name 做了转化 (*persion).Name</font></li>
+</ol>
+<h2 id="接口">接口</h2>
+<p>结节：</p>
+<ol>
+<li>接口本身不能创建实例，但是可以指向一个实现了该接口的自定义类型的变量</li>
+</ol>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+type AInterface interface {
+	Say()
+}
+
+type Stu struct {
+	Name string
+}
+
+func (str Stu) Say() {
+	fmt.Println(&quot;Stu Say&quot;)
+}
+func main() {
+	var stu Stu
+	var a AInterface = stu
+	a.Say()
+}
+</code></pre>
+<ol start="2">
+<li>
+<p>接口中所有的方法都没有就去体即都没有实现的方法</p>
+</li>
+<li>
+<p>在Go中，一个自定义类型需要将某个接口的所有方法都实现，我们说这个自定义类型实现了该接口</p>
+</li>
+<li>
+<p>一个自定义类型只有实现了某个接口，才能将该自定义类型的实例（变量）赋给接口类型</p>
+</li>
+<li>
+<p>只要是自定义数据类型，就可以实现接口，不仅仅是结构体类型</p>
+<pre><code class="language-go">type integer int
+
+func (i integer) Say(){
+	fmt.Println(&quot;wdm.life \n i = &quot;,i)
+}
+</code></pre>
+<pre><code class="language-go">var i ineger = 10
+var b AInterface = i
+b.Sa()
+</code></pre>
+</li>
+<li>
+<p>一个自定义类型可以实现多个接口</p>
+<pre><code class="language-go">type AInterface interface {
+	Say
+}
+
+type BInterface interface {
+	Hello()
+}
+
+type Monster struct {
+
+}
+
+func (m Monster) Say() {
+	fmt.Println(&quot;Sat~~wdm.life&quot;)
+</code></pre>
+</li>
+</ol>
+<p>}</p>
+<p>func (m Monster) Hello() {<br>
+fmt.Println(&quot;Hello~~wdm.life&quot;)<br>
+}</p>
+<p>var monster Monster<br>
+var a2 AInterface = monster<br>
+var b2 Ainterface = monster<br>
+a2.Say()<br>
+b2.Hello()</p>
+<pre><code>
+7. Go接口中不能有任何变量
+
+```go
+type AInterface interface {
+	Name string //这个是不正确的，不允许这个
+	Test01()
+	Test02()
+}
+</code></pre>
+<ol start="8">
+<li>
+<p>一个接口（比如A接口）可以继承多个别的接口（比如B、C接口），这时如果要实现A接口，也必须B，C接口的方法也全部实现</p>
+<pre><code class="language-go">package main
+
+type BInterface interface {
+	test01()
+}
+
+type CInterface interface {
+	test02()
+}
+
+type AInterface interface {
+	BInterface()
+	CInterface()
+	test03()
+}
+type Stu struct {
+}
+
+func (stu Stu) test01() {
+
+}
+func (stu Stu) test02() {
+
+}
+func (stu Stu) test03() {
+
+}
+
+func main() {
+	var stu Stu
+	var a AInterface = stu
+	a.test02()
+}
+</code></pre>
+</li>
+<li>
+<p>interface odfa默认是一个指针（引用类型），如果没有对interface初始化就使用，那么会输出nil</p>
+</li>
+<li>
+<p>空接口interface{}没有任何方法，所以擾类型都实现了空接口，即我们可以把任何一个变量赋给空接口。</p>
+</li>
+</ol>
+<pre><code class="language-go">type T interface{
+}
+</code></pre>
+<h3 id="实践">实践</h3>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;math/rand&quot;
+	&quot;sort&quot;
+)
+
+// 1 声明Hero结构体
+type Hero struct {
+	Name string
+	Age  int
+}
+
+// 2 声明一个Hero结构体切片类型
+type HeroSlice []Hero
+
+// 3 实现Interface 接口
+func (hs HeroSlice) Len() int {
+	return len(hs)
+}
+
+// Less 方法就是决定你使用什么标准进行排序
+// 1 按Hero 的年龄从小到大排序
+func (hs HeroSlice) Less(i, j int) bool {
+	return hs[i].Age &lt; hs[j].Age
+	// 修改成对Name排序
+	// return hs[i].Name &lt; hs[j].Name
+}
+
+func (hs HeroSlice) Swap(i, j int) {
+	// 交换
+	// temp := hs[i]
+	// hs[i] = hs[j]
+	// hs[j] = temp
+	// 下面的一句话等价于上面三句话
+	hs[i], hs[j] = hs[j], hs[i]
+}
+
+// 1 声明 Student 结构体
+type Student struct {
+	Name  string
+	Age   int
+	Socre float64
+}
+
+// 将 Student 的切片，按 Score 从大到小排序
+func main() {
+	// 先定义一个数组/切片
+	var intSlice = []int{0. - 1, 10, 7, 90}
+	// 要求对 intSlice 臼进行排序
+	// 1 冒泡排序……
+	// 2 也可以用系统提供的方法
+	sort.Ints(intSlice)
+	fmt.Println(intSlice)
+
+	var heroes HeroSlice
+	for i := 0; i &lt; 10; i++ {
+		hero := Hero{
+			Name: fmt.Sprintf(&quot;英雄|%d&quot;, rand.Intn(100)),
+			Age:  rand.Intn(100),
+		}
+		heroes = append(heroes, hero)
+	}
+
+	for _, v := range heroes {
+		fmt.Println(v)
+	}
+
+	sort.Sort(heroes)
+	fmt.Println(&quot;***************排序后***************&quot;)
+	for _, v := range heroes {
+		fmt.Println(v)
+	}
+
+	i := 10
+	j := 20
+	i, j = j, i
+	fmt.Println(&quot;i=&quot;, i, &quot;j=&quot;, j)
+}
+</code></pre>
+<h2 id="接口与继承的不同之处">接口与继承的不同之处</h2>
+<ol>
+<li>继承的价值主要在于：解决代码的复用性和可维护性</li>
+<li>接口的价值主要在于：设计，设计好各种规范，让其经自定义类型去实现这些方法</li>
+<li>接口比继承更加灵活；继承是满足 is - a 的关系，而接只需满足 like - a 的关系</li>
+<li>接口在一定程度上实现代码解耦</li>
+</ol>
+<h2 id="goroutine">Goroutine</h2>
+<h3 id="基本介绍-3">基本介绍</h3>
+<ol>
+<li>进程和线程
+<ol>
+<li>进程就是程序在操作系统中的一次执行过程，是系统进行资源分配和调度的基本单位</li>
+<li>线程是进程的一个执行实例，是程序执行的最小单位，它是比进程更小的能独立运行的基本单位</li>
+<li>一个进程可以创建和销毁多个线程，同一个进程中的多个线程可以并发执行</li>
+<li>一个程序至少有一个进程，一个进程至少有一个线程</li>
+</ol>
+</li>
+<li>程序、进程和线程的关系</li>
+<li>并发和并行
+<ol>
+<li>多线程程序在单核上运行，就是并发</li>
+<li>多线程程序在多核上运行，就是并行</li>
+</ol>
+</li>
+</ol>
+<h3 id="协程和主线程">协程和主线程</h3>
+<p>一个主线程上可以起多个协程，协程是轻量级的线程[编译器做优化]</p>
+<h4 id="协程特点">协程特点</h4>
+<ol>
+<li>有独立的栈空间</li>
+<li>共享程序堆空间</li>
+<li>高度由用户控制</li>
+<li>因程是轻量级的线程</li>
+</ol>
+<h3 id="案例-2">案例</h3>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;strconv&quot;
+	&quot;time&quot;
+)
+
+func test() {
+	for i := 1; i &lt;= 10; i++ {
+		fmt.Println(&quot;test () hello,world &quot; + strconv.Itoa(i))
+		time.Sleep(time.Second)
+	}
+}
+func main() {
+	// 开启了一个协程
+	go test()
+
+	for i := 1; i &lt;= 10; i++ {
+		fmt.Println(&quot;main () hello,golang &quot; + strconv.Itoa(i))
+		time.Sleep(time.Second)
+	}
+}
+</code></pre>
+<h4 id="小结"><strong>小结：</strong></h4>
+<ol>
+<li>主线程是一个物理线程，直接作用在CPU上。是重量级的，非常耗费CPU资源</li>
+<li>协程从主线程开启的，是轻量级的线程，是逻辑态。对资源消耗相对小</li>
+<li>go的协程机制是重要的特点，可以轻松的<font color=red><strong>开启上万个协程</strong></font>。其它编程语言的并发机制一般是基于线程的，开启过多的线程，资源耗费大，这里就突显golang在并发上的优势了</li>
+</ol>
+<h3 id="调度模型">调度模型</h3>
+<ol>
+<li>MPG
+<ol>
+<li>M：为操作系统的主线程（物理线程）</li>
+<li>P：协程执行需要的上下文</li>
+<li>G：协程</li>
+</ol>
+</li>
+</ol>
+<h3 id="设置go运行的cpu数">设置Go运行的cpu数</h3>
+<p>**介绍：**为了充分的利用多CPU的优势，在Go程序中，设置运行的CPU数目</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;runtime&quot;
+)
+
+func main() {
+	// 获取当前系统的CPU数量
+	cpuNum := runtime.NumCPU()
+	// 设置num-1个CPU运行go程序
+	runtime.GOMAXPROCS(cpuNum)
+	fmt.Println(&quot;cpuNum=&quot;, cpuNum)
+}
+</code></pre>
+<p>说明：</p>
+<ol>
+<li>go1.8后，默认让程序运行在多个核上，可以不用设置了</li>
+<li>go1.8前，还是要设置一下，可以更高效的利用CPU</li>
+</ol>
+<h4 id="使用全局变量加锁同步改进程序">使用全局变量加锁同步改进程序</h4>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;sync&quot;
+	&quot;time&quot;
+)
+
+/*需求:现在要计算1-200 的各个数的阶乘，并且把各个数的阶乘放入到map中。最后显示出来。
+要求使用goroutine完成*/
+
+//需求:现在要计算1-200的各个数的阶乘，并且把各个数的阶乘放入到map中。.
+//最后显示出来。要求使用goroutine 完成
+//思路
+//1.编写一个函数，来计算各个数的阶乘，并放入到map中.
+//2.我们启动的协程多个，统计的将结果放入到map中
+//3.map应该做出一个全局的.
+var (
+	myMap = make(map[int]int, 10)
+	// 声明一个全局的互斥锁
+	// lock 是一个全局的互斥锁
+	// sync 是包：synchornized 同步
+	// Mutex ：是互斥
+	lock sync.Mutex
+)
+
+// test 计算n!，将这个结果放入到myMap
+func test(n int) {
+	res := 1
+	for i := 1; i &lt;= n; i++ {
+		res *= i
+	}
+	// 将res放入myMap
+	// 加锁
+	lock.Lock()
+	myMap[n] = res
+	// 解锁
+	lock.Unlock()
+}
+
+func main() {
+	// 开启多个协程完成这个
+	for i := 1; i &lt;= 200; i++ {
+		go test(i)
+	}
+	// 休眠 10 秒钟
+	time.Sleep(time.Second * 15)
+
+	// 这里我们输出结果，遍历这个结果
+	for i, v := range myMap {
+		fmt.Printf(&quot;map[%d]=%d\n&quot;, i, v)
+	}
+}
+</code></pre>
+<h2 id="channel">channel</h2>
+<h3 id="介绍-5">介绍：</h3>
+<ol>
+<li>channel本质就是一个数据结构-队列</li>
+<li>数据是先进先出【FIFO:first in first out】</li>
+<li>线程安全，多goroutine访问时，不需要加锁，就是说channel本身就是线程安全的</li>
+<li>channel有类型的，一个string的channel只能存放string类型数据</li>
+</ol>
+<h3 id="定义声明">定义/声明</h3>
+<ul>
+<li>
+<p>var 变量名 chan 数据类型；如：</p>
+<p>var intChan chan int(intChan 用于存放int数据)</p>
+<p>var mapChan chan map[int]string(mapChan用于存放map[int]string类型)</p>
+<p>var perChan chan Person</p>
+<p>var PerChan2 chan *Person</p>
+</li>
+<li>
+<p>说明：</p>
+<ol>
+<li>channe是引用类型</li>
+<li>channel必须初始化才能写入数据，即make后才能使用</li>
+<li>管道是有类型的，intChan 只能写入 整数 int</li>
+</ol>
+</li>
+<li>
+<p>案例</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	// 1 创建一个可以存放3个int类型的管道
+	var intChan chan int
+	intChan = make(chan int, 3)
+	// 2 看看intChan是什么
+	fmt.Printf(&quot;intChan 的w值=%v intChan 本身的地址=%p\n&quot;, intChan, &amp;intChan)
+	// 3 向管道写入数据
+	intChan &lt;- 10
+	num := 211
+	intChan &lt;- num
+	intChan &lt;- 50
+	// intChan&lt;-98注意点，当我们给管道攷数据时，不能超过其容量
+	// 4 看看管道的长度和 cap 容量
+	fmt.Printf(&quot;channel len=%v cap=%v \n&quot;, len(intChan), cap(intChan))
+	//  5 从管道中读取数据
+	var num2 int
+	num2 = &lt;-intChan
+	fmt.Println(&quot;num2=&quot;, num2)
+	fmt.Printf(&quot;channel len=%v cap=%v \n&quot;, len(intChan), cap(intChan))
+	// 6 在没有使用协程的情况下，如果我们的管道数据已经全部取出，再取出就会报告deadlock
+
+	num3 := &lt;-intChan
+	num4 := &lt;-intChan
+	num5 := &lt;-intChan
+	fmt.Println(&quot;num3=&quot;, num3, &quot;num4=&quot;, num4, &quot;num5=&quot;, num5)
+
+}
+</code></pre>
+<p>读写演示：</p>
+<ol>
+<li>
+<p>创建一个intChan最多可存放3个int</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	var intChan chan int
+	intChan = make(chan int, 3)
+	intChan &lt;- 10
+	intChan &lt;- 20
+	intChan &lt;- 30
+	// 因为intChan的容量为3，再存放会报告deadlock
+	// intChan &lt;- 50
+	num1 := &lt;-intChan
+	num2 := &lt;-intChan
+	num3 := &lt;-intChan
+	// 因为intChan的已经没有了，再取会报告deadlock
+	fmt.Printf(&quot;num1=%v  num2=%v  num3=%v &quot;, num1, num2, num3)
+}
+</code></pre>
+</li>
+<li>
+<p>创建一个mapChan,最多可存放10个map[string]string的key-value</p>
+<pre><code class="language-go">package main
+
+func main() {
+	var mapChan chan map[string]string
+	mapChan = make(chan map[string]string, 10)
+	m1 := make(map[string]string, 20)
+
+	m1[&quot;city1&quot;] = &quot;北京&quot;
+	m1[&quot;city2&quot;] = &quot;广州&quot;
+
+	m2 := make(map[string]string, 20)
+	m2[&quot;hero01&quot;] = &quot;老王&quot;
+	m2[&quot;hero01&quot;] = &quot;老李&quot;
+
+	mapChan &lt;- m1
+	mapChan &lt;- m2
+
+}
+</code></pre>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="遍历和关闭">遍历和关闭</h3>
+<p>使用内置函数close可以关闭channel，当channel关闭后就不能再向channel写数据了，但是仍然可以从该channel读取数据</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	intChan := make(chan int, 3)
+	intChan &lt;- 100
+	intChan &lt;- 200
+	close(intChan)
+	// 这个时候不能够再写入数据到channel
+	// intChan &lt;-300
+	fmt.Println(&quot;---------------&quot;)
+	// 当管道关闭后，读取数据是可以的
+	n1 := &lt;-intChan
+	fmt.Println(&quot;n1=&quot;, n1)
+}
+</code></pre>
+<h4 id="遍历-4">遍历</h4>
+<p>channel 支持 for-range 的方式进行遍历，请注两个细节：</p>
+<ol>
+<li>
+<p>在遍历时，如果channel没有关闭，则会出现deadlock的错误</p>
+</li>
+<li>
+<p>在遍历时，如果channel已经关闭，则会出现遍历数据，遍历完后，就会退出遍历</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	intChan := make(chan int, 100)
+	for i := 0; i &lt; 100; i++ {
+		intChan &lt;- i * 2
+	}
+	// 1. 在遍历时，如果channel没有关闭，则会出现deadlock的错误
+	// 2. 在遍历时，如果channel已经关闭，则会出现遍历数据，遍历完后，就会退出遍历
+	close(intChan)
+	for v := range intChan {
+		fmt.Println(&quot;v=&quot;, v)
+	}
+}
+</code></pre>
+</li>
+</ol>
+<h4 id="应用实例">应用实例：</h4>
+<ul>
+<li>完成goroutine和channel协同工作的案例，要求如下：</li>
+</ul>
+<ol>
+<li>
+<p>开启一个writeData协程，向ptutintChan中写入50个整数</p>
+</li>
+<li>
+<p>开启一个readData协程，从管道intChan中读取witeData写入的数据</p>
+</li>
+<li>
+<p>注意：writeData和readData操作的是同一个管道</p>
+</li>
+<li>
+<p>主线程需要等待writeData和readDate协程都完成工作才能退出【管道】</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+// writeData
+func writeData(intChan chan int) {
+	for i := 1; i &lt;= 50; i++ {
+		// 写入管道
+		intChan &lt;- i
+		fmt.Printf(&quot;writeData 写入数据=%v\n&quot;, i)
+	}
+}
+
+// readData
+func readData(intChan chan int, exitChan chan bool) {
+	for {
+		v, ok := &lt;-intChan
+		if !ok {
+			break
+		}
+		fmt.Printf(&quot;readData 读到数据=%v\n&quot;, v)
+	}
+	exitChan &lt;- true
+	close(exitChan)
+}
+func main() {
+	// 创建两个管道
+	intChan := make(chan int, 50)
+	exitChan := make(chan bool, 1)
+	go writeData(intChan)
+	// go readData(intChan, exitChan)
+	for {
+		_, ok := &lt;-exitChan
+		if !ok {
+			break
+		}
+	}
+}
+</code></pre>
+</li>
+</ol>
+<ul>
+<li>
+<p>要求统计1-8000数字中，哪些是素数？（用goroutine和channel）</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;time&quot;
+)
+
+func putNum(intChan chan int) {
+	for i := 1; i &lt;= 8000; i++ {
+		intChan &lt;- i
+	}
+	// 关闭intChan
+	close(intChan)
+}
+
+// 从intChan取出数据，并判断是否为素数，如果是就放入primeChan
+func primeNum(intChan chan int, primeChan chan int, exitChan chan bool) {
+	// 使用for循环
+	// var num int
+	var flag bool
+	for {
+		time.Sleep(time.Millisecond * 10)
+		num, ok := &lt;-intChan
+		if !ok { //取不到数据
+			break
+		}
+		flag = true //假设是素数
+		// 判断num是不是素数
+		for i := 2; i &lt; num; i++ {
+			if num%i == 0 { //说明该num不是素数
+				flag = false
+				break
+			}
+		}
+
+		if flag {
+			// 将这个数放入primeChan
+			primeChan &lt;- num
+		}
+	}
+
+	fmt.Println((&quot;有一个primeNum 协程因为取不到数据，退出&quot;))
+	// 这里我们还不能关闭 primeChan
+	// 向exitChan 写入
+	exitChan &lt;- true
+
+}
+
+func main() {
+	start := time.Now()
+	intChan := make(chan int, 1000)
+	// 放入结果
+	primeChan := make(chan int, 2000)
+	// 标识退出的管道
+	exitChan := make(chan bool, 4) //4个
+
+	// 开启一个协程，向intChan放入 1-8000个数
+	go putNum(intChan)
+	// 开启4个协程，从intChan取出数据，并判断是否为素数	如果是就放入primeChan
+	for i := 0; i &lt; 4; i++ {
+		go primeNum(intChan, primeChan, exitChan)
+	}
+
+	// 这里我们用主线程，直接进行处理
+	go func() {
+		for i := 0; i &lt; 4; i++ {
+			&lt;-exitChan
+		}
+		close(primeChan)
+	}()
+
+	// 遍历 primeChan,把结果取出
+	for {
+		res, ok := &lt;-primeChan
+		if !ok {
+			break
+		}
+		fmt.Printf(&quot;素数=%d\n&quot;, res)
+	}
+	fmt.Println(&quot;main 线程退出&quot;)
+
+	tc := time.Since(start)
+	fmt.Println(&quot;本次耗时为：&quot;, tc)
+}
+</code></pre>
+<h3 id="注意事项">注意事项</h3>
+<ol>
+<li>
+<p>channel可以声明为只读，或者只写性质</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	// 默认情况下是双向的
+	// chan int 这样声明是双向的
+	// 只写
+	var chan2 chan&lt;- int
+	chan2 = make(chan int, 3)
+	chan2 &lt;- 20
+
+	fmt.Println(&quot;chan2=&quot;, chan2)
+
+	// 只读
+	var chan3 &lt;-chan int
+	num := &lt;-chan3
+	fmt.Println(&quot;num=&quot;, num)
+}
+</code></pre>
+</li>
+<li>
+<p>使用select可以解决从管道取数据的阻塞问题</p>
+<pre><code>
+</code></pre>
+</li>
+</ol>
+</li>
+</ul>
 <h2 id="特别说明">特别说明</h2>
 <ol>
 <li>go明确不支持一三元运算符</li>
@@ -320,6 +2008,67 @@ Hello World
 <pre><code class="language-go">/*
 这是块注释
 */
+</code></pre>
+<h2 id="打印金字塔">打印金字塔</h2>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+
+	var totalLevel int = 10
+	// i表示当前层数
+	for i := 1; i &lt;= totalLevel; i++ {
+		// 打印行前空格
+		for k := 1; k &lt;= totalLevel-i; k++ {
+			fmt.Print(&quot; &quot;)
+		}
+		//每行打印的*
+		for j := 1; j &lt;= 2*i-1; j++ {
+			if j == 1 || j == 2*i-1 || i == totalLevel {
+				fmt.Print(&quot;*&quot;)
+			} else {
+				fmt.Print(&quot; &quot;)
+			}
+		}
+		fmt.Println()
+	}
+
+}
+
+</code></pre>
+<h2 id="斐归那契数">斐归那契数</h2>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	fmt.Println(&quot;斐归那契数&quot;, fib(10))
+}
+func fib(n int) int {
+	if n == 1 || n == 2 {
+		return 1
+	} else {
+		return fib(n-1) + fib(n-2)
+	}
+}
+</code></pre>
+<h2 id="9981">9*9=81</h2>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+)
+
+func main() {
+	var num int = 9
+	for i := 1; i &lt;= num; i++ {
+		for j := 1; j &lt;= i; j++ {
+			fmt.Printf(&quot;%v * %v = %v \t&quot;, j, i, j*i)
+		}
+		fmt.Println()
+	}
+}
 </code></pre>
 <h2 id="test">Test</h2>
 <p>测试文件(xxx_test.go)必须与测试文件在同一目录下</p>
@@ -498,7 +2247,8 @@ func setCookie(w http.ResponseWriter, r *http.Request) {
 <ol start="2">
 <li>获取</li>
 </ol>
-<pre><code class="language-go">// setCookie 添加Cookie
+<pre><code class="language-go">
+// setCookie 添加Cookie
 func setCookie(w http.ResponseWriter, r *http.Request) {
 	// 创建Cookie
 	cookie := http.Cookie{
