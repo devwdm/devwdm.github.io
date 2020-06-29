@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1593357034094">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1593416702139">
 <link rel="stylesheet" href="https://wdm.life/styles/main.css">
 
 
@@ -51,7 +51,7 @@ go version go1.14.2 darwin/amd64
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://wdm.life">
-        <img src="https://wdm.life/images/avatar.png?v=1593357034094" class="site-logo">
+        <img src="https://wdm.life/images/avatar.png?v=1593416702139" class="site-logo">
         <h1 class="site-title">日&amp;月星辰</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -439,6 +439,7 @@ func sum(n1 int, args ...int) int {
 <p>每一个源文件都可以包含一个init函数，该函数会在main函数执行前，被Go运行框架调用，换一个说法就是init会在main函数前先被执行</p>
 <h3 id="细节"><strong>细节</strong></h3>
 <pre><code>1. 如果一个文件同时包含全局变量定义，init函数各main函数，则执行的流程：**全局变量定义-&gt;init函数-&gt;main函数**
+
 2. init函数最主要的作用是完成一些初始化的工作
 </code></pre>
 <h2 id="匿名函数">匿名函数</h2>
@@ -1324,29 +1325,28 @@ type Monster struct {
 
 func (m Monster) Say() {
 	fmt.Println(&quot;Sat~~wdm.life&quot;)
+}
+
+func (m Monster) Hello() {
+	fmt.Println(&quot;Hello~~wdm.life&quot;)
+}
+
+var monster Monster
+var a2 AInterface = monster
+var b2 Ainterface = monster
+a2.Say()
+b2.Hello()
 </code></pre>
 </li>
-</ol>
-<p>}</p>
-<p>func (m Monster) Hello() {<br>
-fmt.Println(&quot;Hello~~wdm.life&quot;)<br>
-}</p>
-<p>var monster Monster<br>
-var a2 AInterface = monster<br>
-var b2 Ainterface = monster<br>
-a2.Say()<br>
-b2.Hello()</p>
-<pre><code>
-7. Go接口中不能有任何变量
-
-```go
-type AInterface interface {
+<li>
+<p>Go接口中不能有任何变量</p>
+<pre><code class="language-go">type AInterface interface {
 	Name string //这个是不正确的，不允许这个
 	Test01()
 	Test02()
 }
 </code></pre>
-<ol start="8">
+</li>
 <li>
 <p>一个接口（比如A接口）可以继承多个别的接口（比如B、C接口），这时如果要实现A接口，也必须B，C接口的方法也全部实现</p>
 <pre><code class="language-go">package main
@@ -1389,11 +1389,11 @@ func main() {
 </li>
 <li>
 <p>空接口interface{}没有任何方法，所以擾类型都实现了空接口，即我们可以把任何一个变量赋给空接口。</p>
-</li>
-</ol>
 <pre><code class="language-go">type T interface{
 }
 </code></pre>
+</li>
+</ol>
 <h3 id="实践">实践</h3>
 <pre><code class="language-go">package main
 
@@ -1957,12 +1957,310 @@ func main() {
 </li>
 <li>
 <p>使用select可以解决从管道取数据的阻塞问题</p>
-<pre><code>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;time&quot;
+)
+
+func main() {
+	// 1 定义一个管道 10 个数据 int
+	intChan := make(chan int, 10)
+	for i := 0; i &lt; 10; i++ {
+		intChan &lt;- i
+	}
+
+	// 2 定义一个管道 5 个数据 string
+	stringChan := make(chan string, 5)
+	for i := 0; i &lt; 5; i++ {
+		stringChan &lt;- &quot;hello&quot; + fmt.Sprintf(&quot;%d&quot;, i)
+	}
+
+	// 传统的方法在遍历管道时，如果不关闭会阻塞而导致 deadlock
+	// 在实际的开发中，可能我们不好确定什么时候关闭管道
+	// 用select 解决
+	for {
+		select {
+		// 注意：这里，如果intChan一直没有关闭，不会一直阻塞而deadlock
+		// 会自动到下一个case匹配
+		case v := &lt;-intChan:
+			fmt.Printf(&quot;从intChan读取的数据%d \n&quot;, v)
+			time.Sleep(time.Second)
+		case v := &lt;-stringChan:
+			fmt.Printf(&quot;从stringChan读取的数据%d \n&quot;, v)
+			time.Sleep(time.Second)
+		default:
+			fmt.Printf(&quot;都取不到了，不玩了，程序员可以加入逻辑 \n&quot;)
+			time.Sleep(time.Second)
+			return
+			//break labe
+		}
+	}
+}
+</code></pre>
+</li>
+<li>
+<p>goroutine中使用recover，解决协程中出现panic，导致程序崩溃问题</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;time&quot;
+)
+
+func sayHello() {
+	for i := 0; i &lt; 10; i++ {
+		time.Sleep(time.Second)
+		fmt.Println(&quot;hello,world&quot;)
+	}
+}
+
+// 函数
+func test() {
+	// 这里我们可以使用defer+recover
+	defer func() {
+		// 捕获 test 抛出的的panic
+		if err := recover(); err != nil {
+			fmt.Println(&quot;test() 发生错误&quot;, err)
+		}
+	}()
+	//  定义一个map
+	var myMap map[int]string
+	myMap[0] = &quot;golang&quot; //error
+}
+
+func main() {
+	go sayHello()
+	go test()
+
+	for i := 0; i &lt; 10; i++ {
+		fmt.Println(&quot;main() ok=&quot;, i)
+		time.Sleep(time.Second)
+	}
+}
 </code></pre>
 </li>
 </ol>
 </li>
 </ul>
+<h2 id="反射">反射</h2>
+<h3 id="介绍-6">介绍</h3>
+<ol>
+<li>反射可以在运行时动态 获取变量的各种信息，比如变量的类型(type)，类别(kind)</li>
+<li>如果是结构体变量，还可以获取到结构体本身的信息(包括结构体的字段方法)</li>
+<li>通过反射，可以修改变量的值，可以调用关联的方法</li>
+</ol>
+<h3 id="重要的函数和概念">重要的函数和概念</h3>
+<ol>
+<li>reflect.TypoOf（变量名）,获取变量的类型，返回reflect.Type类型</li>
+<li>reflect。ValueOf（变量名）获取变量的值，返回reflect.Value类型reflect.Value是一个结构体类型。通过reflect.Value，可以获取到关于该变量的很多信息</li>
+<li>变量、interface{} 和 reflect.Value 是可以相互转换的，这点在实际开发中会经常使用到</li>
+</ol>
+<h3 id="案例-3">案例：</h3>
+<ol>
+<li>
+<p>对基本数据类型、interface{}、reflect.Value 进行反射的基本操作</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;reflect&quot;
+)
+
+func reflectTest01(b interface{}) {
+	// 通过反射获取的传入的变量的type,kind 值
+	// 1 先获取到reflect.Type
+	rTyp := reflect.TypeOf(b)
+	fmt.Println(&quot;rType=&quot;, rTyp)
+
+	// 2 获取到reflect.Value
+	rVal := reflect.ValueOf(b)
+
+	n2 := 2 + rVal.Int()
+	fmt.Println(&quot;n2=&quot;, n2)
+
+	fmt.Printf(&quot;rVal=%v rVal type=%T\n&quot;, rVal, rVal)
+
+	// 下面我们将 rVal转换成 interface{}
+	iV := rVal.Interface()
+	// 将 interface{}通过断言转成需要的类型
+	num2 := iV.(int)
+	fmt.Println(&quot;num2=&quot;, num2)
+}
+
+func reflectTest02(b interface{}) {
+	// 通过反射获取的传入的变量的type,kind 值
+	// 1 先获取到reflect.Type
+	rTyp := reflect.TypeOf(b)
+	fmt.Println(&quot;rType=&quot;, rTyp)
+
+	// 2 获取到reflect.Value
+	rVal := reflect.ValueOf(b)
+
+	// 下面我们将 rVal转换成 interface{}
+	iV := rVal.Interface()
+	fmt.Printf(&quot;iv=%v iv type=%T\n&quot;, iV, iV)
+	// 将 interface{}通过断言转成需要的类型断言
+	// 在这里我们可以用switch的断言形式来做更加的灵活
+	stu, ok := iV.(Student)
+	if ok {
+		fmt.Printf(&quot;stu.Name=%v\n&quot;, stu.Name)
+	}
+}
+
+type Student struct {
+	Name string
+	Age  int
+}
+
+type Monster struct {
+	Name string
+	Age  int
+}
+
+func main() {
+	// 1. 先定义一个int
+	// var num int = 100
+	// reflectTest01(num)
+
+	// 2 定义一个Student的实例
+	stu := Student{
+		Name: &quot;wdm&quot;,
+		Age:  25,
+	}
+	reflectTest02(stu)
+}
+</code></pre>
+</li>
+</ol>
+<h3 id="注意事项和细节">注意事项和细节</h3>
+<ol>
+<li>
+<p>reflect.Value.Kind，获取变量的类别，返回的是一个常量</p>
+</li>
+<li>
+<p>Type和Kind的区别</p>
+<p>Type是类型，Kind是类别，Type和Kind可能是相同的也可能是不同的。如：</p>
+<ol>
+<li>var num int = 10 num的Type是int，Kind也是int</li>
+<li>var stu Student stu的Type是 pak1.Student，Kind是struct</li>
+</ol>
+</li>
+<li>
+<p>通过反射可以再让变量在interface{}和Reflect.Value之间相互转换</p>
+</li>
+<li>
+<p>使用反射的方式获取变量的值（并返回对应的类型），要求数据类型匹配，比如x是int,那么就应该使用reflect.Value(x).Int(),而不能使用其它的，否则会报panic</p>
+</li>
+<li>
+<p>通过反射来修改变量，注意当使用SetXxx方法来设置需要通过对应的指针类型来完成，这样才能改变传入的变量值，同时需要使用到reflect.Value.Elem()方法</p>
+</li>
+<li>
+<p>reflect.Value.Elem()</p>
+</li>
+</ol>
+<h2 id="网络编程">网络编程</h2>
+<h3 id="介绍-7">介绍</h3>
+<ol>
+<li>TCP socket编程是网络编程的主流。之所以叫TCP socket编程是因为底层是基于TCP/IP协议的。</li>
+<li>b/s结构的http编程，我们使用浏览器去访问服务器时，使用的就是http协议，而http底层依旧是用TCP socket实现的。</li>
+</ol>
+<h3 id="案例-4">案例：</h3>
+<p>server:</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;fmt&quot;
+	&quot;net&quot;
+)
+
+func proces(conn net.Conn) {
+	// 循环接收客户端发送的数据
+	defer conn.Close() //关闭conn
+	for {
+		// 创建一个新的切片
+		buf := make([]byte, 1024)
+		// conn.Read(buf)
+		// 1 等待客户端通过conn发送信息
+		// 2 如果客户端没有wite[发送]，那么协程就阻塞在这里
+		fmt.Printf(&quot;服务器在等待客户端%s 发送信息\n&quot;, conn.RemoteAddr().String())
+		n, err := conn.Read(buf) //从conn读取
+		if err != nil {
+			fmt.Printf(&quot;客户端退出 err=%v&quot;, err)
+			return
+		}
+		// 3 显示客户端发送的内容到服务器的终端
+		fmt.Print(string(buf[:n]))
+	}
+}
+
+func main() {
+	fmt.Println(&quot;服务端开始监听……&quot;)
+	// net.Listen(&quot;tcp&quot;,&quot;0.0.0.0:8888&quot;)
+	// 1 tcp表示使用的网络协议是tcp
+	// 2 0.0.0.0：8888 表示在本地监听 8888 端口
+	listen, err := net.Listen(&quot;tcp&quot;, &quot;0.0.0.0:8888&quot;)
+	if err != nil {
+		fmt.Println(&quot;listen err=&quot;, err)
+		return
+	}
+	defer listen.Close() //延迟关闭 listen
+
+	// 循环等待客户端来连接我
+	for {
+		fmt.Println(&quot;等待客户端来连接……&quot;)
+		conn, err := listen.Accept()
+		if err != nil {
+			fmt.Println(&quot;Accept() err=&quot;, err)
+		} else {
+			fmt.Printf(&quot;Accept() suc con=%v 客户端ip=%v\n&quot;, conn, conn.RemoteAddr())
+		}
+		// 准备一个协程，为客户端服务
+		go proces(conn)
+	}
+
+}
+</code></pre>
+<p>client:</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;bufio&quot;
+	&quot;fmt&quot;
+	&quot;net&quot;
+	&quot;os&quot;
+)
+
+func main() {
+	conn, err := net.Dial(&quot;tcp&quot;, &quot;192.168.1.188:8888&quot;)
+	if err != nil {
+		fmt.Println(&quot;client dial err=&quot;, err)
+		return
+	}
+	// 功能1 客户端可以发送单行数据，然后就退出
+	reader := bufio.NewReader(os.Stdin) //os.Stdin 代表终端输入
+	for {
+		// 功能1 客户端可以发送单行数据，然后就退出
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println(&quot;readString err=&quot;, err)
+		}
+
+		if line == &quot;exit&quot; {
+			fmt.Printf(&quot;客户端退出&quot;)
+			break
+		}
+		// 再将line发送给 服务器
+		_, err = conn.Write([]byte(line + &quot;\n&quot;))
+		if err != nil {
+			fmt.Println(&quot;con.Write err=&quot;, err)
+		}
+	}
+
+}
+
+</code></pre>
 <h2 id="特别说明">特别说明</h2>
 <ol>
 <li>go明确不支持一三元运算符</li>
@@ -2247,8 +2545,7 @@ func setCookie(w http.ResponseWriter, r *http.Request) {
 <ol start="2">
 <li>获取</li>
 </ol>
-<pre><code class="language-go">
-// setCookie 添加Cookie
+<pre><code class="language-go">// setCookie 添加Cookie
 func setCookie(w http.ResponseWriter, r *http.Request) {
 	// 创建Cookie
 	cookie := http.Cookie{
