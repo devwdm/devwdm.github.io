@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>MongoDB学习笔记 | 日&amp;月星辰</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1594087960938">
+<link rel="stylesheet" href="https://wdm.life/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="MongoDB学习笔记
+简介
+MongoDB（来自于英文单词“Humongous”，中文含义为“庞大”）是可以应用于各种规模的企业、各个行业以及各类应用程序的开源数据库。作为一个适用于敏捷开发的数据库，MongoDB的数据模式可以随着应用程..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://wdm.life">
+        <img src="https://wdm.life/images/avatar.png?v=1594087960938" class="site-logo">
+        <h1 class="site-title">日&amp;月星辰</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/devwdm" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://wdm.life/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">MongoDB学习笔记</h2>
+            <div class="post-date">2020-07-07 10:07:00</div>
+            
+            <div class="post-content" v-pre>
+              <center><h1>MongoDB学习笔记</h1></center>
+<h1 id="简介">简介</h1>
+<p>MongoDB（来自于英文单词“Humongous”，中文含义为“庞大”）是可以应用于各种规模的企业、各个行业以及各类应用程序的开源数据库。作为一个适用于敏捷开发的数据库，MongoDB的数据模式可以随着应用程序的发展而灵活地更新。与此同时，它也为开发人员 提供了传统数据库的功能：二级索引，完整的查询系统以及严格一致性等等。 MongoDB能够使企业更加具有敏捷性和可扩展性，各种规模的企业都可以通过使用MongoDB来创建新的应用，提高与客户之间的工作效率，加快产品上市时间，以及降低企业成本。</p>
+<p>MongoDB是专为可扩展性，高性能和高可用性而设计的数据库。它可以从单服务器部署扩展到大型、复杂的多数据中心架构。利用内存计算的优势，MongoDB能够提供高性能的数据读写操作。 MongoDB的本地复制和自动故障转移功能使您的应用程序具有企业级的可靠性和操作灵活性。</p>
+<h1 id="安装">安装</h1>
+<h2 id="docker">docker</h2>
+<pre><code class="language-sh">$ docker run -itd --name mongo -p 27017:27017 mongo --auth
+</code></pre>
+<h1 id="连接">连接</h1>
+<pre><code class="language-sh">$  docker exec -it mongo mongo
+MongoDB shell version v4.2.8
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&amp;gssapiServiceName=mongodb
+Implicit session: session { &quot;id&quot; : UUID(&quot;29aa2ba6-23cb-451e-94ba-71580a592723&quot;) }
+MongoDB server version: 4.2.8
+&gt; db
+test
+&gt;
+</code></pre>
+<h1 id="基本指令crud">基本指令CRUD</h1>
+<p>show dbs/databases 显示当前所有的数据库</p>
+<p>show collections 显示数据库中所有的集合</p>
+<p>use 数据库名 进入到指定的数据库中；如果数据库不存在，则会在第一次插入数据的时候创建该数据库</p>
+<p>db 表示当前所处的数据库</p>
+<h2 id="插入">插入</h2>
+<p>db.集合名称.insert() 插入</p>
+<pre><code class="language-sql">db.hh.insert({name:&quot;wdm&quot;, url:&quot;wdm.life&quot;}) //
+db.hh.insertOne({}) //插入1个 new 3.2
+db.hh.insertOne([{},{}]) //插入多个 new 3.2
+</code></pre>
+<h2 id="查询">查询</h2>
+<p>db.集合名称.find() 查找</p>
+<pre><code class="language-sql">db.hh.find() //查找全部
+db.hh.findOne() //最多返回一个文档数据，只会返回符合条件的第一个文档数据
+db.hh.find({_id:&quot;wdm&quot;}) //条件查找 {属性:值}
+</code></pre>
+<p>db.集合名称.find().Count() 统计文档数</p>
+<h2 id="修改">修改</h2>
+<p>db.集合名称.update() 修改，默认情况下替换旧对的象；如果需要修改指定的属性，而不是替换旧的对象。</p>
+<pre><code>	1. 使用**$set** 修改指定的属性
+	2. 使用**$unset** 删除指定的属性
+</code></pre>
+<pre><code class="language-sql">db.hh.update({name:&quot;wdm&quot;},{url:&quot;wdmCRUD&quot;})// ({条件},{新对象}) 会替换旧的数据
+
+db.hh.update(
+{name:&quot;wdm4&quot;},
+{$set:{
+  url:&quot;newurl&quot;}
+  })// ({条件},{$set:{属性:&quot;值&quot;}}) 默认修改一个
+  
+db.hh.update(
+{name:&quot;wdm4&quot;},
+{$set:{
+  url:&quot;newurl&quot;
+  	},
+  	{
+  		multi: true
+  	}
+  })// ({条件},{$set:{属性:&quot;值&quot;}}) 修改多个符合条件的属性值
+  
+  db.hh.updateOne()//只修改一个 new 3.2
+  db.hh.updateone()//修改多个 new 3.2
+</code></pre>
+<h2 id="删除">删除</h2>
+<ol>
+<li>
+<p>db.colloection.remove()</p>
+<p>根据条件来删除文档，传递的条件的方式与find()一样；注意：只要符合条件都被删除</p>
+<pre><code class="language-sql">db.hh.remove({url:&quot;newurl&quot;}) // 默认情况下符合条件的都被删除
+db.hh.remove({url:&quot;newurl&quot;},true) //只删除一个文档 就传递第二个参数 true 
+
+db.hh.remove({}) //必须传递参数，传空参数会删除所有的文档。谨慎操作
+//如果要清空所有的文档，用remove({})性能很差：一条条的删除匹配删除 
+db.hh.drop() //删除集合 非常快，一了百了
+</code></pre>
+</li>
+<li>
+<p>db.colloection.deleteOne()</p>
+</li>
+<li>
+<p>db.colloection.deleteMany()</p>
+</li>
+<li>
+<p>db.colloection.drop() 删除集合 非常快，一了百了</p>
+</li>
+<li>
+<p>db.dropDataBase() 删除数据库</p>
+</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://wdm.life/post/git-xue-xi-bi-ji/">
+                  <h3 class="post-title">
+                    Git学习笔记
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'e4e7110311b4c3ba9cb7',
+        clientSecret: '2feab7604d5fe1d18b9059dea0d7b8f58ebbfe30',
+        repo: 'comments',
+        owner: 'devwdm',
+        admin: ['devwdm'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

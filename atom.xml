@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://wdm.life</id>
     <title>日&amp;月星辰</title>
-    <updated>2020-07-05T02:50:46.639Z</updated>
+    <updated>2020-07-07T02:12:48.444Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://wdm.life"/>
     <link rel="self" href="https://wdm.life/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>https://wdm.life/images/avatar.png</logo>
     <icon>https://wdm.life/favicon.ico</icon>
     <rights>All rights reserved 2020, 日&amp;月星辰</rights>
+    <entry>
+        <title type="html"><![CDATA[MongoDB学习笔记]]></title>
+        <id>https://wdm.life/post/mongodb-xue-xi-bi-ji/</id>
+        <link href="https://wdm.life/post/mongodb-xue-xi-bi-ji/">
+        </link>
+        <updated>2020-07-07T02:12:30.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Git学习笔记]]></title>
         <id>https://wdm.life/post/git-xue-xi-bi-ji/</id>
@@ -72,12 +79,5 @@
         <link href="https://wdm.life/post/golandgou-lang-xue-xi-bi-ji/">
         </link>
         <updated>2020-06-17T06:10:21.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[为什么会有写博客这个想法]]></title>
-        <id>https://wdm.life/post/xie-bo-ke-de-yuan-yin/</id>
-        <link href="https://wdm.life/post/xie-bo-ke-de-yuan-yin/">
-        </link>
-        <updated>2020-01-06T05:54:29.000Z</updated>
     </entry>
 </feed>
