@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1594087960938">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1594183418656">
 <link rel="stylesheet" href="https://wdm.life/styles/main.css">
 
 
@@ -36,7 +36,7 @@ MongoDB（来自于英文单词“Humongous”，中文含义为“庞大”）�
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://wdm.life">
-        <img src="https://wdm.life/images/avatar.png?v=1594087960938" class="site-logo">
+        <img src="https://wdm.life/images/avatar.png?v=1594183418656" class="site-logo">
         <h1 class="site-title">日&amp;月星辰</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -135,6 +135,19 @@ test
 db.hh.insertOne({}) //插入1个 new 3.2
 db.hh.insertOne([{},{}]) //插入多个 new 3.2
 </code></pre>
+<h3 id="批量插入">批量插入</h3>
+<pre><code class="language-sql">//性能很差 I/O 太频繁
+for(var i = 1; i&lt;=20000;i++){
+    db.hh.insert({num:i});
+}
+
+//改进方法
+ var arr=[];
+ for (var i=1;i&lt;=20000;i++){
+  arr.push({no:i})
+ }
+ db.hh.insert(arr);
+</code></pre>
 <h2 id="查询">查询</h2>
 <p>db.集合名称.find() 查找</p>
 <pre><code class="language-sql">db.hh.find() //查找全部
@@ -142,11 +155,105 @@ db.hh.findOne() //最多返回一个文档数据，只会返回符合条件的�
 db.hh.find({_id:&quot;wdm&quot;}) //条件查找 {属性:值}
 </code></pre>
 <p>db.集合名称.find().Count() 统计文档数</p>
-<h2 id="修改">修改</h2>
-<p>db.集合名称.update() 修改，默认情况下替换旧对的象；如果需要修改指定的属性，而不是替换旧的对象。</p>
-<pre><code>	1. 使用**$set** 修改指定的属性
-	2. 使用**$unset** 删除指定的属性
+<p>$eq 等于</p>
+<pre><code class="language-sql">// 这两个方法都是等
+db.hh.find({num:{$eq:500}});
+db.hh.find({num:500});
 </code></pre>
+<p>$gt 大于</p>
+<pre><code class="language-sql">db.hh.find({num:{$gt:500}});
+</code></pre>
+<p>$gte 大于等于</p>
+<pre><code class="language-sql">db.hh.find({num:{$gte:500}});
+</code></pre>
+<p>$lt  小于</p>
+<p>$lte  小于等于</p>
+<pre><code class="language-sql">db.hh.find({num:{$lt:500}});
+</code></pre>
+<p>$ne 不等于</p>
+<pre><code class="language-sql">db.hh.find({num:{$ne:50}});
+</code></pre>
+<p>大于40小于50</p>
+<pre><code class="language-sql">db.hh.find({num:{$gt:40,$lt:50}});
+</code></pre>
+<p>$lte 小于等于 前xx条数据 此处数据有特殊性。应当使用limit(x)来操作</p>
+<pre><code>db.hh.find({num:{$lte:10}});
+
+db.hh.find().limit(10);
+</code></pre>
+<p>limit() 设置显示数据的上限</p>
+<pre><code class="language-sql">db.hh.find().limit(10); //只显示前10条 
+</code></pre>
+<p>skip() 跳过指定数量的数据</p>
+<pre><code class="language-sql"> db.hh.find().skip(10).limit(10);//显示 11-20条数据
+ // 分页查询 每页10条数据 当前页码no
+  db.hh.find().skip((no-1)*10).limit(10);//no为页码
+  db.hh.find().limit(10).skip((no-1)*10);//no为页码效果一样，mongodb会自动调整skip和limit的位置
+</code></pre>
+<p>pretty() 格式化显示所有文档</p>
+<h3 id="进阶">进阶</h3>
+<p>小于10或大于1990</p>
+<pre><code class="language-sql">  db.hh.find({$or : [{num:{$lt:10}},{num:{$gt:1990}}]})
+</code></pre>
+<p>sort({属性:1/-11}) 排序；1升序，-1降序</p>
+<p>查询只显示部分属性 1表示显示 0表示不显示</p>
+<pre><code class="language-sql">db.hh.find({},{属性:1,_id:0})s
+</code></pre>
+<h2 id="修改">修改</h2>
+<p><strong>db.集合名称.update()</strong> 修改，默认情况下替换旧对的象；如果需要修改指定的属性，而不是替换旧的对象。</p>
+<ol>
+<li>
+<p><strong>$set</strong> 修改指定的属性</p>
+<pre><code class="language-sql">{ $set : { field : value } }
+</code></pre>
+</li>
+<li>
+<p><strong>$unset</strong> 删除指定的属性</p>
+<pre><code class="language-sql">{ $unset : { field : 1} }
+</code></pre>
+</li>
+<li>
+<p><strong>$inc</strong> 对文档的某个值为数字型（只能为满足要求的数字）的键进行增减的操作。</p>
+<pre><code class="language-sql">{ $inc : { field : value } }
+</code></pre>
+</li>
+<li>
+<p><strong>$push</strong> 向数组中添加一个新的元素</p>
+<pre><code class="language-sql">{ $push : { field : value } }
+</code></pre>
+</li>
+<li>
+<p>**<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mi>u</mi><mi>s</mi><mi>h</mi><mi>A</mi><mi>l</mi><mi>l</mi><mo>∗</mo><mo>∗</mo><mi mathvariant="normal">同</mi></mrow><annotation encoding="application/x-tex">pushAll** 同</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mord mathdefault">u</span><span class="mord mathdefault">s</span><span class="mord mathdefault">h</span><span class="mord mathdefault">A</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.46528em;vertical-align:0em;"></span><span class="mord">∗</span><span class="mord cjk_fallback">同</span></span></span></span>push,只是一次可以追加多个值到一个数组字段内。</p>
+<pre><code class="language-sql">{ $pushAll : { field : value_array } }
+</code></pre>
+</li>
+<li>
+<p><strong>$pull</strong> 从数组field内删除一个等于value值</p>
+<pre><code class="language-sql">{ $pull : { field : _value } }
+</code></pre>
+</li>
+<li>
+<p><strong>$addToSet</strong> 向数组中添加一个新的元素，如果数组中存在了<strong>则不会</strong>添加</p>
+</li>
+<li>
+<p><strong>$pop</strong> 删除数组的第一个或最后一个元素</p>
+<pre><code class="language-sql">{ $pop : { field : 1 } }
+</code></pre>
+<ol start="9">
+<li><strong>$rename</strong> 修改字段名称</li>
+</ol>
+<pre><code class="language-sql">{ $rename : { old_field_name : new_field_name } }
+</code></pre>
+<ol start="10">
+<li><strong>$bit</strong> 位操作符号</li>
+</ol>
+<pre><code>{$bit : { field : {and : 5}}}
+</code></pre>
+</li>
+<li>
+<p><strong>db.集合名称.replaceOne()</strong> 替换</p>
+</li>
+</ol>
 <pre><code class="language-sql">db.hh.update({name:&quot;wdm&quot;},{url:&quot;wdmCRUD&quot;})// ({条件},{新对象}) 会替换旧的数据
 
 db.hh.update(
@@ -194,6 +301,421 @@ db.hh.drop() //删除集合 非常快，一了百了
 <p>db.dropDataBase() 删除数据库</p>
 </li>
 </ol>
+<h1 id="文档之前的关系">文档之前的关系</h1>
+<p>通过内嵌文档来实现</p>
+<h2 id="一对一">一对一</h2>
+<pre><code class="language-sql">db.wifeAndHusband.insert([
+    {
+        name:&quot;黄蓉&quot;,
+        hushband:{
+        name:&quot;郭靖&quot;
+        }
+    },{
+        name:&quot;潘金莲&quot;,
+        hushband:{
+        name:&quot;武大郎&quot;
+        }
+    }
+]);
+</code></pre>
+<h2 id="一对多">一对多</h2>
+<h2 id="多对多">多对多</h2>
+<h1 id="索引">索引</h1>
+<p>createIndex(keys, options)</p>
+<h2 id="语法">语法</h2>
+<pre><code class="language-sql">db.collection.createIndex(keys, options)
+//实例 Key 值为你要创建的索引字段，1 为指定按升序创建索引，如果你想按降序来创建索引指定为 -1 即可。
+db.col.createIndex({&quot;title&quot;:1})
+// 在后台创建索引
+db.values.createIndex({open: 1, close: 1}, {background: true})
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>background</th>
+<th>Boolean</th>
+<th>建索引过程会阻塞其它数据库操作，background可指定以后台方式创建索引，即增加 &quot;background&quot; 可选参数。 &quot;background&quot; 默认值为<strong>false</strong>。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unique</td>
+<td>Boolean</td>
+<td>建立的索引是否唯一。指定为true创建唯一索引。默认值为<strong>false</strong>.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>索引的名称。如果未指定，MongoDB的通过连接索引的字段名和排序顺序生成一个索引名称。</td>
+</tr>
+<tr>
+<td>dropDups</td>
+<td>Boolean</td>
+<td>**3.0+版本已废弃。**在建立唯一索引时是否删除重复记录,指定 true 创建唯一索引。默认值为 <strong>false</strong>.</td>
+</tr>
+<tr>
+<td>sparse</td>
+<td>Boolean</td>
+<td>对文档中不存在的字段数据不启用索引；这个参数需要特别注意，如果设置为true的话，在索引字段中不会查询出不包含对应字段的文档.。默认值为 <strong>false</strong>.</td>
+</tr>
+<tr>
+<td>expireAfterSeconds</td>
+<td>integer</td>
+<td>指定一个以秒为单位的数值，完成 TTL设定，设定集合的生存时间。</td>
+</tr>
+<tr>
+<td>v</td>
+<td>index version</td>
+<td>索引的版本号。默认的索引版本取决于mongod创建索引时运行的版本。</td>
+</tr>
+<tr>
+<td>weights</td>
+<td>document</td>
+<td>索引权重值，数值在 1 到 99,999 之间，表示该索引相对于其他索引字段的得分权重。</td>
+</tr>
+<tr>
+<td>default_language</td>
+<td>string</td>
+<td>对于文本索引，该参数决定了停用词及词干和词器的规则的列表。 默认为英语</td>
+</tr>
+<tr>
+<td>language_override</td>
+<td>string</td>
+<td>对于文本索引，该参数指定了包含在文档中的字段名，语言覆盖默认的language，默认值为 language.</td>
+</tr>
+</tbody>
+</table>
+<h1 id="聚合">聚合</h1>
+<h2 id="语法-2">语法</h2>
+<pre><code class="language-sql">db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)
+</code></pre>
+<h1 id="分片">分片</h1>
+<ul>
+<li>复制所有的写入操作到主节点</li>
+<li>延迟的敏感数据会在主节点查询</li>
+<li>单个副本集限制在12个节点</li>
+<li>当请求量巨大时会出现内存不足。</li>
+<li>本地磁盘不足</li>
+<li>垂直扩展价格昂贵</li>
+</ul>
+<h1 id="备份与恢复">备份与恢复</h1>
+<h2 id="备份">备份</h2>
+<h3 id="语法-3">语法</h3>
+<p>-h ip:port ； -d 需要备份的实例； -o 备份的数据存放位置</p>
+<pre><code class="language-sql">mongodump -h dbhost -d dbname -o dbdirectory
+</code></pre>
+<p>备份所有MongoDB数据</p>
+<pre><code class="language-sql">mongodump --host runoob.com --port 27017
+</code></pre>
+<p>备份指定数据库的集合</p>
+<pre><code class="language-sql">mongodump --collection mycol --db test
+</code></pre>
+<h2 id="恢复">恢复</h2>
+<h3 id="语法-4">语法</h3>
+<p>-h ip:port</p>
+<p>-d 需要恢复的数据库</p>
+<p>--drop恢复的时候先删除当前数据，然后恢复备份的数据。恢复后，备份后添加修改的数据都会被删除，慎用哦！</p>
+<p>&lt;path&gt; 设置备份数据所在位置</p>
+<p>--dir 指定备份的目录，不能同时指定&lt;path&gt;和dir选项</p>
+<pre><code>mongorestore -h &lt;hostname&gt;&lt;:port&gt; -d dbname &lt;path&gt;
+</code></pre>
+<h1 id="监控">监控</h1>
+<h2 id="mongostat">mongostat</h2>
+<p>mongostat是mongodb自带的状态检测工具，在命令行下使用。它会间隔固定时间获取mongodb的当前运行状态，并输出。如果你发现数据库突然变慢或者有其他问题的话，你第一手的操作就考虑采用mongostat来查看mongo的状态。</p>
+<pre><code class="language-sh">$ mongostat
+</code></pre>
+<h2 id="mongotop">mongotop</h2>
+<p>mongotop也是mongodb下的一个内置工具，mongotop提供了一个方法，用来跟踪一个MongoDB的实例，查看哪些大量的时间花费在读取和写入数据。 mongotop提供每个集合的水平的统计数据。默认情况下，mongotop返回值的每一秒。</p>
+<pre><code class="language-sh">$ mongotop
+$ mongotop 10 #10s刷新一次
+</code></pre>
+<ul>
+<li>ns 包含数据库命名空间，后者结合了数据库名称和集合。</li>
+<li>db 包含数据库的名称。名为 . 的数据库针对全局锁定，而非特定数据库。</li>
+<li>total mongod花费的时间工作在这个命名空间提供总额。</li>
+<li>read 提供了大量的时间，这mongod花费在执行读操作，在此命名空间。</li>
+<li>write 提供这个命名空间进行写操作，这mongod花了大量的时间。</li>
+</ul>
+<h1 id="覆盖索引查询">覆盖索引查询</h1>
+<ul>
+<li>所有的查询字段是索引的一部分</li>
+<li>所有的查询返回字段在同一个索引中</li>
+</ul>
+<p>创建联合索引，字段为 gender 和 user_name</p>
+<pre><code class="language-sql">db.users.ensureIndex({gender:1,user_name:1})
+</code></pre>
+<p>索引会覆盖以下查询</p>
+<pre><code class="language-sql">db.users.find({gender:&quot;M&quot;},{user_name:1,_id:0})
+</code></pre>
+<h1 id="查询分析">查询分析</h1>
+<p>查询分析常用函数有：explain() 和 hint()</p>
+<h2 id="explain">explain()</h2>
+<ul>
+<li><strong>indexOnly</strong>: 字段为 true ，表示我们使用了索引。</li>
+<li><strong>cursor</strong>：因为这个查询使用了索引，MongoDB 中索引存储在B树结构中，所以这是也使用了 BtreeCursor 类型的游标。如果没有使用索引，游标的类型是 BasicCursor。这个键还会给出你所使用的索引的名称，你通过这个名称可以查看当前数据库下的system.indexes集合（系统自动创建，由于存储索引信息）来得到索引的详细信息。</li>
+<li><strong>n</strong>：当前查询返回的文档数量。</li>
+<li><strong>nscanned/nscannedObjects</strong>：表明当前这次查询一共扫描了集合中多少个文档，我们的目的是，让这个数值和返回文档的数量越接近越好。</li>
+<li><strong>millis</strong>：当前查询所需时间，毫秒数。</li>
+<li><strong>indexBounds</strong>：当前查询具体使用的索引。</li>
+</ul>
+<pre><code class="language-sql">db.usersfind().explain()
+</code></pre>
+<h2 id="hint">hint()</h2>
+<p>虽然MongoDB查询优化器一般工作的很不错，但是也可以使用 hint 来强制 MongoDB 使用一个指定的索引。这种方法某些情形下会提升性能。 一个有索引的 collection 并且执行一个多字段的查询(一些字段已经索引了)。</p>
+<pre><code class="language-sql">db.users.find({gender:&quot;M&quot;},{user_name:1,_id:0}).hint({gender:1,user_name:1})
+</code></pre>
+<pre><code class="language-sql">db.users.find({gender:&quot;M&quot;},{user_name:1,_id:0}).hint({gender:1,user_name:1}).explain()
+</code></pre>
+<h1 id="高级索引">高级索引</h1>
+<p>假设我们基于标签来检索用户，为此我们需要对集合中的数组 tags 建立索引。</p>
+<p>在数组中创建索引，需要对数组中的每个字段依次建立索引。</p>
+<p>建数组索引</p>
+<pre><code class="language-sql">db.users.ensureIndex({&quot;tags&quot;:1})
+</code></pre>
+<p>检索集合的 tags 字段</p>
+<pre><code class="language-sql">db.users.find({tags:&quot;cricket&quot;})
+</code></pre>
+<h2 id="索引子文档字段">索引子文档字段</h2>
+<p>假设我们需要通过city、state、pincode字段来检索文档，由于这些字段是子文档的字段，所以我们需要对子文档建立索引。</p>
+<p>为子文档的三个字段创建索引，命令如下：</p>
+<pre><code class="language-sql">db.users.ensureIndex({&quot;address.city&quot;:1,&quot;address.state&quot;:1,&quot;address.pincode&quot;:1})
+</code></pre>
+<p>旦创建索引，我们可以使用子文档的字段来检索数据：</p>
+<pre><code class="language-sql">db.users.find({&quot;address.city&quot;:&quot;Los Angeles&quot;})   
+</code></pre>
+<p>查询表达不一定遵循指定的索引的顺序，mongodb 会自动优化。</p>
+<h1 id="索引限制">索引限制</h1>
+<h2 id="额外开销">额外开销</h2>
+<p>每个索引占据一定的存储空间，在进行插入，更新和删除操作时也需要对索引进行操作。所以，如果你很少对集合进行读取操作，建议不使用索引。</p>
+<h2 id="内存ram使用">内存(RAM)使用</h2>
+<p>由于索引是存储在内存(RAM)中,你应该确保该索引的大小不超过内存的限制。</p>
+<p>如果索引的大小大于内存的限制，MongoDB会删除一些索引，这将导致性能下降。</p>
+<h2 id="查询限制">查询限制</h2>
+<p>索引不能被以下的查询使用：</p>
+<ul>
+<li>正则表达式及非操作符，如 $nin, $not, 等。</li>
+<li>算术运算符，如 $mod, 等。</li>
+<li>$where 子句</li>
+</ul>
+<p>所以，检测你的语句是否使用索引是一个好的习惯，可以用explain来查看。</p>
+<h2 id="索引键限制">索引键限制</h2>
+<p>从2.6版本开始，如果现有的索引字段的值超过索引键的限制，MongoDB中不会创建索引。</p>
+<h2 id="插入文档超过索引键限制">插入文档超过索引键限制</h2>
+<p>如果文档的索引字段值超过了索引键的限制，MongoDB不会将任何文档转换成索引的集合。与mongorestore和mongoimport工具类似。</p>
+<h2 id="最大范围">最大范围</h2>
+<ul>
+<li>集合中索引不能超过64个</li>
+<li>索引名的长度不能超过128个字符</li>
+<li>一个复合索引最多可以有31个字段</li>
+</ul>
+<h1 id="objectid">ObjectId</h1>
+<p>ObjectId 是一个12字节 BSON 类型数据，有以下格式：</p>
+<ul>
+<li>前4个字节表示时间戳</li>
+<li>接下来的3个字节是机器标识码</li>
+<li>紧接的两个字节由进程id组成（PID）</li>
+<li>最后三个字节是随机数。</li>
+</ul>
+<p>MongoDB中存储的文档必须有一个&quot;_id&quot;键。这个键的值可以是任何类型的，默认是个ObjectId对象。</p>
+<p>在一个集合里面，每个文档都有唯一的&quot;_id&quot;值，来确保集合里面每个文档都能被唯一标识。</p>
+<p>MongoDB采用ObjectId，而不是其他比较常规的做法（比如自动增加的主键）的主要原因，因为在多个 服务器上同步自动增加主键值既费力还费时。</p>
+<h2 id="创建新的objectid">创建新的ObjectId</h2>
+<pre><code class="language-sql">newObjId = ObjectId()
+</code></pre>
+<h2 id="创建文档的时间戳">创建文档的时间戳</h2>
+<p>由于 ObjectId 中存储了 4 个字节的时间戳，所以你不需要为你的文档保存时间戳字段，你可以通过 getTimestamp 函数来获取文档的创建时间:</p>
+<pre><code class="language-sql">ObjectId(&quot;5349b4ddd2781d08c09890f4&quot;).getTimestamp()
+</code></pre>
+<h2 id="objectid-转换为字符串">ObjectId 转换为字符串</h2>
+<p>在某些情况下，您可能需要将ObjectId转换为字符串格式。</p>
+<pre><code class="language-sql">new ObjectId().str
+</code></pre>
+<h1 id="mapreduce">MapReduce</h1>
+<p>Map-Reduce是一种计算模型，简单的说就是将大批量的工作（数据）分解（MAP）执行，然后再将结果合并成最终结果（REDUCE）。</p>
+<p>MongoDB提供的Map-Reduce非常灵活，对于大规模数据分析也相当实用。</p>
+<h2 id="mapreduce-命令">MapReduce 命令</h2>
+<p>基本说法</p>
+<pre><code class="language-sql">db.collection.mapReduce(
+   function() {emit(key,value);},  //map 函数
+   function(key,values) {return reduceFunction},   //reduce 函数
+   {
+      out: collection,
+      query: document,
+      sort: document,
+      limit: number
+   }
+)
+</code></pre>
+<p>参数说明:</p>
+<ul>
+<li><strong>map</strong> ：映射函数 (生成键值对序列,作为 reduce 函数参数)。</li>
+<li><strong>reduce</strong> 统计函数，reduce函数的任务就是将key-values变成key-value，也就是把values数组变成一个单一的值value。。</li>
+<li><strong>out</strong> 统计结果存放集合 (不指定则使用临时集合,在客户端断开后自动删除)。</li>
+<li><strong>query</strong> 一个筛选条件，只有满足条件的文档才会调用map函数。（query。limit，sort可以随意组合）</li>
+<li><strong>sort</strong> 和limit结合的sort排序参数（也是在发往map函数前给文档排序），可以优化分组机制</li>
+<li><strong>limit</strong> 发往map函数的文档数量的上限（要是没有limit，单独使用sort的用处不大）</li>
+</ul>
+<p>命令：</p>
+<pre><code class="language-sql">db.posts.mapReduce( 
+   function() { emit(this.user_name,1); }, 
+   function(key, values) {return Array.sum(values)}, 
+      {  
+         query:{status:&quot;active&quot;},  
+         out:&quot;post_total&quot; 
+      }
+)
+</code></pre>
+<p>输出结果：</p>
+<pre><code class="language-json">{
+	&quot;result&quot; : &quot;post_total&quot;,
+	&quot;timeMillis&quot; : 53,
+	&quot;counts&quot; : {
+		&quot;input&quot; : 1,
+		&quot;emit&quot; : 1,
+		&quot;reduce&quot; : 0,
+		&quot;output&quot; : 1
+	},
+	&quot;ok&quot; : 1
+}
+</code></pre>
+<p>具体参数说明：</p>
+<ul>
+<li>result：储存结果的collection的名字,这是个临时集合，MapReduce的连接关闭后自动就被删除了。</li>
+<li>timeMillis：执行花费的时间，毫秒为单位</li>
+<li>input：满足条件被发送到map函数的文档个数</li>
+<li>emit：在map函数中emit被调用的次数，也就是所有集合中的数据总量</li>
+<li>ouput：结果集合中的文档个数**（count对调试非常有帮助）**</li>
+<li>ok：是否成功，成功为1</li>
+<li>err：如果失败，这里可以有失败原因，不过从经验上来看，原因比较模糊，作用不大</li>
+</ul>
+<p>使用 find 操作符来查看 mapReduce 的查询</p>
+<pre><code class="language-sql">db.posts.mapReduce( 
+   function() { emit(this.user_name,1); }, 
+   function(key, values) {return Array.sum(values)}, 
+      {  
+         query:{status:&quot;active&quot;},  
+         out:&quot;post_total&quot; 
+      }
+).find()
+</code></pre>
+<p>用类似的方式，MapReduce可以被用来构建大型复杂的聚合查询。</p>
+<p>Map函数和Reduce函数可以使用 JavaScript 来实现，使得MapReduce的使用非常灵活和强大。</p>
+<h1 id="全文检索">全文检索</h1>
+<h2 id="启用全文检索">启用全文检索</h2>
+<p>MongoDB 在 2.6 版本以后是默认开启全文检索的，如果你使用之前的版本，你需要使用以下代码来启用全文检索:</p>
+<pre><code class="language-sql">&gt;db.adminCommand({setParameter:true,textSearchEnabled:true})
+</code></pre>
+<p>或者使用命令：</p>
+<pre><code>mongod --setParameter textSearchEnabled=true
+</code></pre>
+<h2 id="创建全文索引">创建全文索引</h2>
+<p>考虑以下 posts 集合的文档数据，包含了文章内容（post_text）及标签(tags)：</p>
+<pre><code>{
+   &quot;post_text&quot;: &quot;enjoy the mongodb articles on Runoob&quot;,
+   &quot;tags&quot;: [
+      &quot;mongodb&quot;,
+      &quot;runoob&quot;
+   ]
+}
+</code></pre>
+<h2 id="删除全文索引">删除全文索引</h2>
+<p>删除已存在的全文索引，可以使用 find 命令查找索引名：</p>
+<pre><code class="language-sql">&gt;db.posts.getIndexes()
+</code></pre>
+<h1 id="正则表达式">正则表达式</h1>
+<p>正则表达式是使用单个字符串来描述、匹配一系列符合某个句法规则的字符串。</p>
+<p>许多程序设计语言都支持利用正则表达式进行字符串操作。</p>
+<p>MongoDB 使用 <strong>$regex</strong> 操作符来设置匹配字符串的正则表达式。</p>
+<p>MongoDB使用PCRE (Perl Compatible Regular Expression) 作为正则表达式语言。</p>
+<p>不同于全文检索，我们使用正则表达式不需要做任何配置。</p>
+<h2 id="使用正则表达式">使用正则表达式</h2>
+<p>以下命令使用正则表达式查找包含 runoob 字符串的文章：</p>
+<pre><code>&gt;db.posts.find({post_text:{$regex:&quot;runoob&quot;}})
+</code></pre>
+<p>以上查询也可以写为：</p>
+<pre><code>&gt;db.posts.find({post_text:/runoob/})
+</code></pre>
+<h2 id="不区分大小写的正则表达式">不区分大小写的正则表达式</h2>
+<p>如果检索需要不区分大小写，我们可以设置 $options 为 $i。</p>
+<p>以下命令将查找不区分大小写的字符串 runoob：</p>
+<pre><code class="language-sql">&gt;db.posts.find({post_text:{$regex:&quot;runoob&quot;,$options:&quot;$i&quot;}})
+</code></pre>
+<h2 id="数组元素使用正则表达式">数组元素使用正则表达式</h2>
+<p>我们还可以在数组字段中使用正则表达式来查找内容。 这在标签的实现上非常有用，如果你需要查找包含以 run 开头的标签数据(ru 或 run 或 runoob)， 你可以使用以下代码：</p>
+<pre><code class="language-sql">&gt;db.posts.find({tags:{$regex:&quot;run&quot;}})
+</code></pre>
+<h2 id="优化正则表达式查询">优化正则表达式查询</h2>
+<ul>
+<li>如果你的文档中字段设置了索引，那么使用索引相比于正则表达式匹配查找所有的数据查询速度更快。</li>
+<li>如果正则表达式是前缀表达式，所有匹配的数据将以指定的前缀字符串为开始。例如： 如果正则表达式为 <strong>^tut</strong> ，查询语句将查找以 tut 为开头的字符串。</li>
+</ul>
+<p><strong>这里面使用正则表达式有两点需要注意：</strong></p>
+<p>正则表达式中使用变量。一定要使用eval将组合的字符串进行转换，不能直接将字符串拼接后传入给表达式。否则没有报错信息，只是结果为空！实例如下：</p>
+<pre><code>var name=eval(&quot;/&quot; + 变量值key +&quot;/i&quot;); 
+</code></pre>
+<p>以下是模糊查询包含title关键词, 且不区分大小写:</p>
+<pre><code class="language-sql">title:eval(&quot;/&quot;+title+&quot;/i&quot;)    // 等同于 title:{$regex:title,$Option:&quot;$i&quot;}   
+</code></pre>
+<h1 id="固定集合capped-collections">固定集合（Capped Collections）</h1>
+<p>MongoDB 固定集合（Capped Collections）是性能出色且有着固定大小的集合，对于大小固定，我们可以想象其就像一个环形队列，当集合空间用完后，再插入的元素就会覆盖最初始的头部的元素！</p>
+<h2 id="创建固定集合">创建固定集合</h2>
+<p>我们通过createCollection来创建一个固定集合，且capped选项设置为true：</p>
+<pre><code>&gt;db.createCollection(&quot;cappedLogCollection&quot;,{capped:true,size:10000})
+</code></pre>
+<p>还可以指定文档个数,加上max:1000属性：</p>
+<pre><code>&gt;db.createCollection(&quot;cappedLogCollection&quot;,{capped:true,size:10000,max:1000})
+</code></pre>
+<p>判断集合是否为固定集合:</p>
+<pre><code>&gt;db.cappedLogCollection.isCapped()
+</code></pre>
+<p>如果需要将已存在的集合转换为固定集合可以使用以下命令：</p>
+<pre><code>&gt;db.runCommand({&quot;convertToCapped&quot;:&quot;posts&quot;,size:10000})
+</code></pre>
+<p>以上代码将我们已存在的 posts 集合转换为固定集合。</p>
+<h2 id="固定集合查询">固定集合查询</h2>
+<p>固定集合文档按照插入顺序储存的,默认情况下查询就是按照插入顺序返回的,也可以使用$natural调整返回顺序。</p>
+<pre><code class="language-sql">&gt;db.cappedLogCollection.find().sort({$natural:-1})
+</code></pre>
+<h2 id="固定集合的功能特点">固定集合的功能特点</h2>
+<p>可以插入及更新,但更新不能超出collection的大小,否则更新失败,不允许删除,但是可以调用drop()删除集合中的所有行,但是drop后需要显式地重建集合。</p>
+<p>在32位机子上一个cappped collection的最大值约为482.5M,64位上只受系统文件大小的限制。</p>
+<h2 id="固定集合属性及用法">固定集合属性及用法</h2>
+<h3 id="属性">属性</h3>
+<ul>
+<li>属性1:对固定集合进行插入速度极快</li>
+<li>属性2:按照插入顺序的查询输出速度极快</li>
+<li>属性3:能够在插入最新数据时,淘汰最早的数据</li>
+</ul>
+<h3 id="用法">用法</h3>
+<ul>
+<li>用法1:储存日志信息</li>
+<li>用法2:缓存一些少量的文档</li>
+</ul>
+<h1 id="自动增长">自动增长</h1>
+<p>MongoDB 没有像 SQL 一样有自动增长的功能， MongoDB 的 _id 是系统自动生成的12字节唯一标识。</p>
+<p>但在某些情况下，我们可能需要实现 ObjectId 自动增长功能。</p>
+<p>由于 MongoDB 没有实现这个功能，我们可以通过编程的方式来实现，以下我们将在 counters 集合中实现_id字段自动增长。</p>
+<h2 id="使用-counters-集合">使用 counters 集合</h2>
+<p>考虑以下 products 文档。我们希望 _id 字段实现 从 1,2,3,4 到 n 的自动增长功能。</p>
+<pre><code>{
+  &quot;_id&quot;:1,
+  &quot;product_name&quot;: &quot;Apple iPhone&quot;,
+  &quot;category&quot;: &quot;mobiles&quot;
+}
+</code></pre>
+<p>为此，创建 counters 集合，序列字段值可以实现自动长：</p>
+<pre><code>&gt;db.createCollection(&quot;counters&quot;)
+</code></pre>
+<p>现在我们向 counters 集合中插入以下文档，使用 productid 作为 key:</p>
+<pre><code>{
+  &quot;_id&quot;:&quot;productid&quot;,
+  &quot;sequence_value&quot;: 0
+}
+</code></pre>
+<p>sequence_value 字段是序列通过自动增长后的一个值。</p>
+<p>使用以下命令插入 counters 集合的序列文档中：</p>
+<pre><code>&gt;db.counters.insert({_id:&quot;productid&quot;,sequence_value:0})
+</code></pre>
 
             </div>
             
