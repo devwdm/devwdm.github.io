@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://wdm.life</id>
     <title>日&amp;月星辰</title>
-    <updated>2020-07-08T10:27:26.754Z</updated>
+    <updated>2020-07-09T07:14:13.060Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://wdm.life"/>
     <link rel="self" href="https://wdm.life/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>https://wdm.life/images/avatar.png</logo>
     <icon>https://wdm.life/favicon.ico</icon>
     <rights>All rights reserved 2020, 日&amp;月星辰</rights>
+    <entry>
+        <title type="html"><![CDATA[Redis学习笔记]]></title>
+        <id>https://wdm.life/post/redis-xue-xi-bi-ji/</id>
+        <link href="https://wdm.life/post/redis-xue-xi-bi-ji/">
+        </link>
+        <updated>2020-07-09T07:10:48.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[光猫吉比特GS3101改为桥接路由器拨号模式]]></title>
         <id>https://wdm.life/post/guang-mao-ji-bi-te-gs3101-gai-wei-qiao-jie-lu-you-qi-bo-hao-mo-shi/</id>
@@ -72,12 +79,5 @@
         <link href="https://wdm.life/post/ab-ya-li-ce-shi-xue-xi-bi-ji/">
         </link>
         <updated>2020-06-18T12:18:12.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MYSQL学习笔记]]></title>
-        <id>https://wdm.life/post/mysql-xue-xi-bi-ji/</id>
-        <link href="https://wdm.life/post/mysql-xue-xi-bi-ji/">
-        </link>
-        <updated>2020-06-17T11:23:36.000Z</updated>
     </entry>
 </feed>
