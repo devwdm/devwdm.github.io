@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>SQLServer学习笔记 | 酸菜鱼</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1599191428794">
+<link rel="stylesheet" href="https://wdm.life/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="SQLServer学习笔记
+查询
+计算列
+select name sal*12 as &quot;年薪&quot; from emp;
+
+distinct
+不允许重复
+--distinct deptno 会过滤掉重复的deptno值
+sel..." />
+    <meta name="keywords" content="sql server,DB" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://wdm.life">
+        <img src="https://wdm.life/images/avatar.png?v=1599191428794" class="site-logo">
+        <h1 class="site-title">酸菜鱼</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/devwdm" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://wdm.life/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">SQLServer学习笔记</h2>
+            <div class="post-date">2020-09-04 11:09:00</div>
+            
+            <div class="post-content" v-pre>
+              <center><h1>SQLServer学习笔记</h1></center>
+<h1 id="查询">查询</h1>
+<h2 id="计算列">计算列</h2>
+<pre><code class="language-mssql">select name sal*12 as &quot;年薪&quot; from emp;
+</code></pre>
+<h2 id="distinct">distinct</h2>
+<p>不允许重复</p>
+<pre><code class="language-mssql">--distinct deptno 会过滤掉重复的deptno值
+select distinct deptno from emp;
+--distinct 也可以过滤掉null
+</code></pre>
+<h2 id="between">between</h2>
+<pre><code class="language-mssql">--两个方法查询结果是等价，方法1的效率更高
+select * from emp
+	where sal betwwen 1500 and 2000; --推荐使用
+等价
+select * from emp
+	where sal &gt;= 1500 and sal &lt;= 2000;
+
+select * from emp
+	where sal =&lt; 1500 0r sal &gt;= 2000;
+--等价
+select * from emp
+	where sal not between 1500 and 2000;
+</code></pre>
+<h2 id="in">in</h2>
+<p>属于若干个孤立的值</p>
+<pre><code class="language-mssql">select * from emp
+	where sal in (1500,1600,1700);
+--等价于
+select * from emp
+	where sal = 1500 or sal = 1600 or sal = 1700;
+	
+	select * from emp
+	where sal not in (1500,1600,1700);
+--等价于
+select * from emp
+	where sal &lt;&gt; 1500 and sal &lt;&gt; 1600 and sal &lt;&gt; 1700;--编程语言中用 != 
+</code></pre>
+<h2 id="top">top</h2>
+<pre><code class="language-mssql">select top 10 id from emp; --查询前10个数据
+</code></pre>
+<h2 id="null">null</h2>
+<p>表示空值或没有值</p>
+<p>零和null是不一样的，null表示空值，没有值，零表示一个确定的值</p>
+<p>null 不参与以下运算符： &lt;&gt; != = 运算</p>
+<p>null 可能参与如下运算：is	not is</p>
+<p>任何类型的数据都允许为null</p>
+<p>任何数字与null参与数学运算的结果永远为null</p>
+<pre><code class="language-mssql">select * from emp where comm = null;
+select * from emp where comm != null;
+select * from emp where comm &lt;&gt; null;
+--都是错误的， null 不参与 &lt;&gt; != = 运算
+select * from emp where comm is not null;
+select * from emp where comm is null;
+-- null 可以与 is not 运算
+
+select ename, sal * 12 + isnull(comm, 0) from emp;
+--isnull(comm, 0)如果comm是null就返回零 否则返回comm的值
+</code></pre>
+<h2 id="order-by">order by</h2>
+<p>排序</p>
+<pre><code class="language-mssql">select top 5 *
+	from emp
+	where sal between 1800 and 2000
+	order by sal desc ;--desc 降序 默认是升序asc可以不写
+	
+order by a ,b  --两个都是升序
+order by a ,b desc --a升序 b降序
+order by a desc , b --a降序 b升序
+order by a desc , b desc --两个都是降序
+
+-- 强烈建议为每个字段写上排序类型
+</code></pre>
+<h2 id="模糊查询">模糊查询</h2>
+<p>格式：</p>
+<pre><code class="language-mssql">select * from table_name
+	where num_name like ‘通配符’; -- % _[a-F] 正则
+</code></pre>
+<pre><code class="language-mssql">select * from table_name
+	where num_name like ’_wdm.life‘;
+
+select * from table_name
+	where num_name like ’%\%%‘ escape '\'; -- \%转义 查询含有 %号的值
+</code></pre>
+<h2 id="聚合函数">聚合函数</h2>
+<h3 id="函数的分类">函数的分类</h3>
+<h4 id="单行函数">单行函数</h4>
+<p>每行返回一个值</p>
+<pre><code class="language-mssql">select lower(ename) from emp; -- 最终返回的是xx行 lower()是单行函数
+</code></pre>
+<h4 id="多行函数">多行函数</h4>
+<p>多行返回一个值</p>
+<pre><code class="language-mssql">select max(sal) from emp; --返回时1行max()是多行函数
+</code></pre>
+<h4 id="聚合函数的分类">聚合函数的分类</h4>
+<p>max() 最大</p>
+<p>min() 最小</p>
+<p>avg() 平均值</p>
+<p>count() 求个数</p>
+<pre><code class="language-mssql">select count(*) from emp; --返回emp表所有的记录的个数
+select count(emp_no) from emp; --返回emp表emp_no的记录的个数,过滤掉重复的数值
+
+select count(distinct emp_no) from emp; --返回不重复且非空记录的个数
+</code></pre>
+<h2 id="group-by">group by</h2>
+<p>分组后select中只能出现分组后的整体信息，不能出现组内的详细信息</p>
+<p>格式：</p>
+<p>​	group by 字段的集合</p>
+<p>功能：</p>
+<p>​	把表中的记录按照字段分成不同的组</p>
+<p>如：</p>
+<pre><code class="language-mssql">select * 
+	from emp
+	group by deptno ;
+</code></pre>
+<p>注意：</p>
+<p>​	理解：group by a, b, c 的用法</p>
+<p>​				先按a分组，如果a相同，再按b分组，如果b相同，再按c分组</p>
+<p>​				最终统计的是小分组的信息</p>
+<h2 id="having">having</h2>
+<p>【分组之后的信息进行过滤】</p>
+<p>​		因此使用having时通常都会先使用group by ；</p>
+<p>​		如果没有使用group by 但使用了having</p>
+<p>​		则意味着having把所有的记录当做一组来进行过滤<strong>极少用</strong></p>
+<p>只能出现原始字段不能出现别名</p>
+<pre><code class="language-mssql">select deptno, avg(sal) as &quot;平均工资&quot;
+	from emp
+	group by deptno
+	having avg(sal) &gt; 1500;
+</code></pre>
+<h2 id="连接查询">连接查询</h2>
+<h3 id="定义">定义</h3>
+<p>将两个表或者两个以上的表以一定的连接条件连接起来，从中检索出满足条件的数据。</p>
+<h3 id="分类">分类</h3>
+<h4 id="内连接">内连接</h4>
+<ol>
+<li>
+<p>产生的结果：行数是a和b的乘积，列是a和b之和。（笛卡尔积）</p>
+<pre><code class="language-mssql">select * from a, b 
+</code></pre>
+</li>
+<li>
+<p>产生的笛卡尔积用where中的条件进行过滤</p>
+<pre><code class="language-mssql">select * from a, b where 
+</code></pre>
+</li>
+<li>
+<p>SQL92与SQL99的区别</p>
+<pre><code class="language-mssql">select * from a, b where -- sql92标准
+select * from a join b on -- sql99标准 （推荐使用）
+-- 结果都一样
+</code></pre>
+</li>
+<li>
+<p>其他</p>
+<pre><code class="language-mssql">select、from、where、join、on、group by、order by、 top、 having
+</code></pre>
+</li>
+</ol>
+<h4 id="外连接">外连接</h4>
+<h4 id="完全连接">完全连接</h4>
+<h4 id="交叉连接">交叉连接</h4>
+<h4 id="自连接">自连接</h4>
+<h4 id="联合">联合</h4>
+<h2 id="嵌套查询">嵌套查询</h2>
+<h2 id="视图">视图</h2>
+<p>优点：</p>
+<p>​		简化查询</p>
+<p>​		增加数据的保密性</p>
+<p>缺点：</p>
+<p>​		增加了数据库的维护的成本</p>
+<p>​		视图只是简化了查询，但是并不能加快查询的速度， 这也是视图使用不足的地方</p>
+<p>注意的问题：</p>
+<p>​		创建视图的select语句必须为所有的计算列指定别名</p>
+<pre><code class="language-mssql">create view v$_a 
+	as 
+			select avg(sal) as &quot;avg_sal&quot; from emp;
+</code></pre>
+<p>​		视图不是物理表，是虚拟表</p>
+<p>​		不建议通过视图更新视图所依附的原始表的数据或结果</p>
+<h2 id="分页查询">分页查询</h2>
+<p>方法一：</p>
+<pre><code class="language-mssql">select top pageSize 列名 from table_name 
+	select top 条数 * from table_name
+	where id not in (select top pageSize*(pageIndex -1) id from table_name);
+	
+select top 2 * from users
+	where id not in (select top 2 id from users);
+</code></pre>
+<p>方法二：</p>
+<pre><code class="language-mssql">select * from (select * ,
+	row_number() over (order by id) as rowNumber from table_name) as b
+	where row_number between pageIndex-1*pageSize and pageIndex*pageSize ;
+	
+select * from (
+	select *, row_number() over(order by id) as row_number from Users) as b
+	where row_number between 0 and 3;
+</code></pre>
+<p>方法三（2012以上版本可使用）：</p>
+<pre><code class="language-mssql">select * from table_name
+	order by id offset pageIndex row fetc next pageSize row only;
+	
+select * from users order by id offset 2 row fetch next 5 row only;
+</code></pre>
+<h2 id="分割">分割</h2>
+<ol>
+<li>select **left(列 , 截取的长度) ** from table;</li>
+</ol>
+<p>统计姓氏人数</p>
+<pre><code class="language-mssql">select  LEFT(name,1) &quot;姓&quot;, COUNT(LEFT(name,1)) &quot;总数&quot;
+	from hh
+	group by LEFT(name,1)
+	order by COUNT(LEFT(name,1)) desc;
+</code></pre>
+<ol start="2">
+<li>select <strong>substring(字符串/列名, 开始, 结束)</strong> from table</li>
+</ol>
+<pre><code class="language-mssql">select  SUBSTRING(name,0,2) &quot;姓&quot;, COUNT(SUBSTRING(name,0,2)) &quot;总数&quot;
+	from hh
+	group by SUBSTRING(name,0,2)
+	order by COUNT(SUBSTRING(name,0,2)) desc;
+</code></pre>
+<ol start="3">
+<li>
+<p>定位特殊字符串</p>
+<p>select charindex(“字符串/列名”, ‘查找的字符’, ‘出现的位置’) from table</p>
+</li>
+</ol>
+<h1 id="事务">事务</h1>
+<p>定义：一系列操作要全部执行成功，要么全部执行失败。</p>
+<pre><code class="language-mssql">begin transaction --开始事务
+commit transaction --提交事务
+rollback transaction --回滚事务
+</code></pre>
+<ol>
+<li>避免数据处于不合理的中间状态；如：转账</li>
+<li>怎么避免多用户同进访问呈现给用户的数据时合理的；这个很复杂</li>
+</ol>
+<p>事务和线程的关系</p>
+<p>​	事务也是通过锁来解决很多问题的</p>
+<p>​	线程同步就是通过锁来解决 synchronized</p>
+<p>事务和第三方插件的关系</p>
+<p>​	直接使用事务库技术难度很大 很多人是借助第三方插件来实现，因此我们一般人不需要细细的研究数据库中事务的语法细节</p>
+<p>​	第三方插件要想完成预期的功能，一般必须借助数据库中的事务机制来实现</p>
+<h1 id="索引">索引</h1>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://wdm.life/tag/sql-server/" class="tag">
+                    sql server
+                  </a>
+                
+                  <a href="https://wdm.life/tag/db/" class="tag">
+                    DB
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://wdm.life/post/redis-xue-xi-bi-ji/">
+                  <h3 class="post-title">
+                    Redis学习笔记
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'e4e7110311b4c3ba9cb7',
+        clientSecret: '2feab7604d5fe1d18b9059dea0d7b8f58ebbfe30',
+        repo: 'comments',
+        owner: 'devwdm',
+        admin: ['devwdm'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
