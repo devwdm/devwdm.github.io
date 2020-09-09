@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>数组和链表的区别 | 酸菜鱼</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1599666837654">
+<link rel="stylesheet" href="https://wdm.life/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="数组和链表的区别
+数组和链表是两种基本的数据结构，他们在内存存储上的表现不一样，有各自的特点。
+数组的特点
+
+在内存中，数组是一块连续的区域。
+数组需要预留空间，在使用前要先申请占用内存的大小（声明创建数组的时候需要设置数组的大小）。
+插入..." />
+    <meta name="keywords" content="数据结构,算法,QA" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://wdm.life">
+        <img src="https://wdm.life/images/avatar.png?v=1599666837654" class="site-logo">
+        <h1 class="site-title">酸菜鱼</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/devwdm" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://wdm.life/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">数组和链表的区别</h2>
+            <div class="post-date">2020-09-09 23:09:00</div>
+            
+            <div class="post-content" v-pre>
+              <center><h1>数组和链表的区别</h1></center>
+<p>数组和链表是两种基本的数据结构，他们在内存存储上的表现不一样，有各自的特点。</p>
+<h1 id="数组的特点">数组的特点</h1>
+<ul>
+<li>在内存中，数组是一块连续的区域。</li>
+<li>数组需要预留空间，在使用前要先申请占用内存的大小（声明创建数组的时候需要设置数组的大小）。</li>
+<li>插入数据和删除数据效率低，插入数据时，这个位置的数据在内存中都要向后移。删除数据时，这个数据后面的数据都要往前移动。</li>
+<li>随机读取效率高很高。因为数组是连续的，知道每一个数据的内存地址，可能直接找到给定地址的数据。</li>
+<li>不利于扩展，数据定义的空间不够时要重新定义数组。</li>
+</ul>
+<h2 id="优点">优点</h2>
+<ul>
+<li>随机访问性强</li>
+<li>查找速度快</li>
+</ul>
+<h2 id="缺点">缺点</h2>
+<ul>
+<li>插入和删除效率低</li>
+<li>可能浪费内存（很难预估好数组的大小，一般都会有冗余）</li>
+<li>内存空间要求高，必须有足够且连续内存空间</li>
+<li>数组大小固定，不能动态拓展</li>
+</ul>
+<h1 id="链表的特点">链表的特点</h1>
+<ul>
+<li>在内存中可以存在任何地方，不需求连续。</li>
+<li>每一个数据都保存了下一个数据的内存地址，通过这个地址找到下一个数据。</li>
+<li>增加数据和删除数据很容易</li>
+<li>查找数据时效率低，因为不具有随机访问性，所以请问某个位置的数据都要从第一个开始访问（遍历），然后根据第一个数据保存的下一个数据的地址找到第二个数据，以此类推。</li>
+<li>不指定大小，扩展方便。链表大小不用定义，数据随意增删。</li>
+</ul>
+<h2 id="优点-2">优点</h2>
+<ul>
+<li>插入删除速度快</li>
+<li>内存利用率高，不会浪费内存</li>
+<li>大小不固定，拓展灵活</li>
+</ul>
+<h2 id="缺点-2">缺点</h2>
+<ul>
+<li>不能随机查找，必须从第一个开始遍历，查找效率低</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>数组</th>
+<th>链表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读取</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>插入</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>删除</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://wdm.life/tag/shu-ju-jie-gou/" class="tag">
+                    数据结构
+                  </a>
+                
+                  <a href="https://wdm.life/tag/suan-fa/" class="tag">
+                    算法
+                  </a>
+                
+                  <a href="https://wdm.life/tag/qa/" class="tag">
+                    QA
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://wdm.life/post/si-suo/">
+                  <h3 class="post-title">
+                    死锁
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'e4e7110311b4c3ba9cb7',
+        clientSecret: '2feab7604d5fe1d18b9059dea0d7b8f58ebbfe30',
+        repo: 'comments',
+        owner: 'devwdm',
+        admin: ['devwdm'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

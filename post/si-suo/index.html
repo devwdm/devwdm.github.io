@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>死锁 | 酸菜鱼</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://wdm.life/favicon.ico?v=1599666837654">
+<link rel="stylesheet" href="https://wdm.life/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="死锁
+定义
+如果一个进程集合中的每个进程都在等待只能由该进程集合中的其他进程才能引发的事件，那么，该进程集合就是死锁的。
+产生的条件
+
+
+互斥条件：进程应互斥使用资源，任一时刻一个资源仅为一个进程独占，若另一个进程请求一个已被占用的资源时，..." />
+    <meta name="keywords" content="os,QA,死锁,并发,操作系统" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://wdm.life">
+        <img src="https://wdm.life/images/avatar.png?v=1599666837654" class="site-logo">
+        <h1 class="site-title">酸菜鱼</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/devwdm" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="https://wdm.life/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">死锁</h2>
+            <div class="post-date">2020-09-09 00:09:00</div>
+            
+            <div class="post-content" v-pre>
+              <center><h1>死锁</h1></center>
+<h1 id="定义">定义</h1>
+<p>如果一个进程集合中的每个进程都在等待只能由该进程集合中的其他进程才能引发的事件，那么，该进程集合就是死锁的。</p>
+<h1 id="产生的条件">产生的条件</h1>
+<ol>
+<li>
+<p>互斥条件：进程应互斥使用资源，任一时刻一个资源仅为一个进程独占，若另一个进程请求一个已被占用的资源时，它被置成等待状态，直到占用者释放资源。</p>
+</li>
+<li>
+<p>占有和等待条件：一个进程请求资源得不到满足而等待时，不释放已占有的资源。</p>
+</li>
+<li>
+<p>不可抢占条件：任一进程不能从另一进程那里抢夺资源，即已被占用的资源，只能由占用进程自己来释放。</p>
+</li>
+<li>
+<p>环路等待条件：死锁了生时，系统中一定有两个或两个以上的进程组成一个循环，循环中的每个进程都在等待下一个进程释放的资源。</p>
+<p>发生死锁时，以上条件必须同时满足。任意一个条件不成立，死锁就不会发生。</p>
+</li>
+</ol>
+<h1 id="驼峰算法">驼峰算法</h1>
+<p>把头埋在沙子里，假装问题根本没有发生。</p>
+<h1 id="死锁检测和恢复">死锁检测和恢复</h1>
+<p>这种解决方式不会尝试去阻止死锁的出现。相反，这种解决方案会希望死锁尽可能的出现，在监测到死锁出现后，对其进行恢复</p>
+<h2 id="每种类型一个资源的死锁检测方式">每种类型一个资源的死锁检测方式</h2>
+<figure data-type="image" tabindex="1"><img src="https://wdm.life/post-images/1599642229126.png" alt="" loading="lazy"></figure>
+<p>如果这张图包含了一个或一个以上的环，那么死锁就存在，处于这个环中任意一个进程都是死锁的进程。</p>
+<h2 id="每种类型多个资源的死锁检测方式">每种类型多个资源的死锁检测方式</h2>
+<p>如果有多种相同的资源存在，就需要采用另一种方法来检测死锁。可以能过构造一个矩阵来检测从P1-Pn这n个进程中的死锁。</p>
+<figure data-type="image" tabindex="2"><img src="https://wdm.life/post-images/1599642242862.png" alt="" loading="lazy"></figure>
+<p><strong>考量标准：</strong></p>
+<ul>
+<li>每当有资源请求时就去检测，这种方式会占用昂贵的CPU时间。</li>
+<li>每隔n分钟检测一次，或者当CPU使用率低到某个标准下去检测。考虑到CPU效率的原因，如果死锁进程达到一定数量，就没有多少进程可能运行了，所以CPU会经常空闲。</li>
+</ul>
+<h2 id="从死锁中恢复">从死锁中恢复</h2>
+<h3 id="通过抢占进行恢复">通过抢占进行恢复</h3>
+<p>在某些情况下，可能会临时将某个资源从它的持有者转移到另一个进程。比如在不通道原进程的情况下，将某个资源从进程中强制取走给其他进程使用，使用完后又送回。这种恢复方式一般比较困难而且有些简单粗暴，并不可取。</p>
+<h3 id="通过回滚进程恢复">通过回滚进程恢复</h3>
+<p>如果系统设计者和机会操作员知道可能发生死锁，那么就可以定期检查流程。进程的检测点意味着进程的状态可能被写入到文件以后便后面进行恢复。检测点不仅包含<strong>存储镜像</strong>，还包含<strong>资源状态</strong>。一种更有效的解决方式是不需要覆盖原有的检测点，而是每出现一个检测点都要把它写入到文件中，这样当进程执行时，就会有一系列的检查点文件被累积起来。</p>
+<p>为了进行恢复，要从上一个较早的检查点开始，这样所需要的资源的进程会回滚到一个时间点，在这个时间点上，死锁进程还没有获取所需要的资源，可能在此时对其进行资源分配。</p>
+<h3 id="杀死进程恢复">杀死进程恢复</h3>
+<p>最简单有效的解决方案是直接杀死一个死锁进程。但是杀死一个进程可能照样行不通，这时候就需要杀死中坚力量的资源进行恢复。</p>
+<p>另外一种方式是选择一个环外的进程作为牺牲品来释放进程资源。</p>
+<h1 id="死锁的避免">死锁的避免</h1>
+<h2 id="单个资源的银行家算法">单个资源的银行家算法</h2>
+<h2 id="多个资源的银行家算法">多个资源的银行家算法</h2>
+<h1 id="死锁的预防">死锁的预防</h1>
+<h2 id="破坏互斥条件">破坏互斥条件</h2>
+<h2 id="破坏占有并等待条件">破坏占有并等待条件</h2>
+<h2 id="破坏不可抢占条件">破坏不可抢占条件</h2>
+<h2 id="破坏环路等待条件">破坏环路等待条件</h2>
+<h1 id="参考文献">参考文献</h1>
+<ol>
+<li>现在操作系统 第四版</li>
+</ol>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://wdm.life/tag/os/" class="tag">
+                    os
+                  </a>
+                
+                  <a href="https://wdm.life/tag/qa/" class="tag">
+                    QA
+                  </a>
+                
+                  <a href="https://wdm.life/tag/si-suo/" class="tag">
+                    死锁
+                  </a>
+                
+                  <a href="https://wdm.life/tag/bing-fa/" class="tag">
+                    并发
+                  </a>
+                
+                  <a href="https://wdm.life/tag/cao-zuo-xi-tong/" class="tag">
+                    操作系统
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://wdm.life/post/sqlserver-xue-xi-bi-ji/">
+                  <h3 class="post-title">
+                    SQLServer学习笔记
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'e4e7110311b4c3ba9cb7',
+        clientSecret: '2feab7604d5fe1d18b9059dea0d7b8f58ebbfe30',
+        repo: 'comments',
+        owner: 'devwdm',
+        admin: ['devwdm'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

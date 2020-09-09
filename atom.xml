@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://wdm.life</id>
     <title>酸菜鱼</title>
-    <updated>2020-09-04T03:50:41.169Z</updated>
+    <updated>2020-09-09T15:54:01.210Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://wdm.life"/>
     <link rel="self" href="https://wdm.life/atom.xml"/>
@@ -10,6 +10,20 @@
     <logo>https://wdm.life/images/avatar.png</logo>
     <icon>https://wdm.life/favicon.ico</icon>
     <rights>All rights reserved 2020, 酸菜鱼</rights>
+    <entry>
+        <title type="html"><![CDATA[数组和链表的区别]]></title>
+        <id>https://wdm.life/post/shu-zu-he-lian-biao-de-qu-bie/</id>
+        <link href="https://wdm.life/post/shu-zu-he-lian-biao-de-qu-bie/">
+        </link>
+        <updated>2020-09-09T15:42:40.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[死锁]]></title>
+        <id>https://wdm.life/post/si-suo/</id>
+        <link href="https://wdm.life/post/si-suo/">
+        </link>
+        <updated>2020-09-08T16:39:16.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SQLServer学习笔记]]></title>
         <id>https://wdm.life/post/sqlserver-xue-xi-bi-ji/</id>
@@ -65,19 +79,5 @@
         <link href="https://wdm.life/post/gitlab-xue-xi-bi-ji/">
         </link>
         <updated>2020-06-19T10:42:06.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Docker学习笔记]]></title>
-        <id>https://wdm.life/post/docker-xue-xi-bi-ji/</id>
-        <link href="https://wdm.life/post/docker-xue-xi-bi-ji/">
-        </link>
-        <updated>2020-06-18T16:02:07.000Z</updated>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Linux之centos学习笔记]]></title>
-        <id>https://wdm.life/post/linux-zhi-centos-xue-xi-bi-ji/</id>
-        <link href="https://wdm.life/post/linux-zhi-centos-xue-xi-bi-ji/">
-        </link>
-        <updated>2020-06-18T15:27:37.000Z</updated>
     </entry>
 </feed>
