@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://wdm.life</id>
-    <title>酸菜鱼</title>
-    <updated>2020-09-09T15:54:01.210Z</updated>
+    <title>kitt_基特</title>
+    <updated>2020-11-30T02:56:19.865Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://wdm.life"/>
     <link rel="self" href="https://wdm.life/atom.xml"/>
     <subtitle>阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。</subtitle>
     <logo>https://wdm.life/images/avatar.png</logo>
     <icon>https://wdm.life/favicon.ico</icon>
-    <rights>All rights reserved 2020, 酸菜鱼</rights>
+    <rights>All rights reserved 2020, kitt_基特</rights>
     <entry>
         <title type="html"><![CDATA[数组和链表的区别]]></title>
         <id>https://wdm.life/post/shu-zu-he-lian-biao-de-qu-bie/</id>
