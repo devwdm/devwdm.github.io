@@ -1,82 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://wdm.life</id>
+    <id>http://wdm.life</id>
     <title>右江彼岸</title>
-    <updated>2021-07-11T18:17:18.632Z</updated>
+    <updated>2021-07-11T18:18:13.389Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://wdm.life"/>
-    <link rel="self" href="https://wdm.life/atom.xml"/>
+    <link rel="alternate" href="http://wdm.life"/>
+    <link rel="self" href="http://wdm.life/atom.xml"/>
     <subtitle>阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。</subtitle>
-    <logo>https://wdm.life/images/avatar.png</logo>
-    <icon>https://wdm.life/favicon.ico</icon>
+    <logo>http://wdm.life/images/avatar.png</logo>
+    <icon>http://wdm.life/favicon.ico</icon>
     <rights>All rights reserved 2021, 右江彼岸</rights>
     <entry>
         <title type="html"><![CDATA[数组和链表的区别]]></title>
-        <id>https://wdm.life/post/shu-zu-he-lian-biao-de-qu-bie/</id>
-        <link href="https://wdm.life/post/shu-zu-he-lian-biao-de-qu-bie/">
+        <id>http://wdm.life/post/shu-zu-he-lian-biao-de-qu-bie/</id>
+        <link href="http://wdm.life/post/shu-zu-he-lian-biao-de-qu-bie/">
         </link>
         <updated>2020-09-09T15:42:40.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[死锁]]></title>
-        <id>https://wdm.life/post/si-suo/</id>
-        <link href="https://wdm.life/post/si-suo/">
+        <id>http://wdm.life/post/si-suo/</id>
+        <link href="http://wdm.life/post/si-suo/">
         </link>
         <updated>2020-09-08T16:39:16.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[SQLServer学习笔记]]></title>
-        <id>https://wdm.life/post/sqlserver-xue-xi-bi-ji/</id>
-        <link href="https://wdm.life/post/sqlserver-xue-xi-bi-ji/">
+        <id>http://wdm.life/post/sqlserver-xue-xi-bi-ji/</id>
+        <link href="http://wdm.life/post/sqlserver-xue-xi-bi-ji/">
         </link>
         <updated>2020-09-04T03:49:29.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Redis学习笔记]]></title>
-        <id>https://wdm.life/post/redis-xue-xi-bi-ji/</id>
-        <link href="https://wdm.life/post/redis-xue-xi-bi-ji/">
+        <id>http://wdm.life/post/redis-xue-xi-bi-ji/</id>
+        <link href="http://wdm.life/post/redis-xue-xi-bi-ji/">
         </link>
         <updated>2020-07-09T07:10:48.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[光猫吉比特GS3101改为桥接路由器拨号模式]]></title>
-        <id>https://wdm.life/post/guang-mao-ji-bi-te-gs3101-gai-wei-qiao-jie-lu-you-qi-bo-hao-mo-shi/</id>
-        <link href="https://wdm.life/post/guang-mao-ji-bi-te-gs3101-gai-wei-qiao-jie-lu-you-qi-bo-hao-mo-shi/">
+        <id>http://wdm.life/post/guang-mao-ji-bi-te-gs3101-gai-wei-qiao-jie-lu-you-qi-bo-hao-mo-shi/</id>
+        <link href="http://wdm.life/post/guang-mao-ji-bi-te-gs3101-gai-wei-qiao-jie-lu-you-qi-bo-hao-mo-shi/">
         </link>
         <updated>2020-07-08T09:22:36.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[MongoDB学习笔记]]></title>
-        <id>https://wdm.life/post/mongodb-xue-xi-bi-ji/</id>
-        <link href="https://wdm.life/post/mongodb-xue-xi-bi-ji/">
+        <id>http://wdm.life/post/mongodb-xue-xi-bi-ji/</id>
+        <link href="http://wdm.life/post/mongodb-xue-xi-bi-ji/">
         </link>
         <updated>2020-07-07T02:12:30.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Git学习笔记]]></title>
-        <id>https://wdm.life/post/git-xue-xi-bi-ji/</id>
-        <link href="https://wdm.life/post/git-xue-xi-bi-ji/">
+        <id>http://wdm.life/post/git-xue-xi-bi-ji/</id>
+        <link href="http://wdm.life/post/git-xue-xi-bi-ji/">
         </link>
         <updated>2020-06-21T14:54:18.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Windows]]></title>
-        <id>https://wdm.life/post/windows/</id>
-        <link href="https://wdm.life/post/windows/">
+        <id>http://wdm.life/post/windows/</id>
+        <link href="http://wdm.life/post/windows/">
         </link>
         <updated>2020-06-21T13:33:30.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[Markdown常用技巧]]></title>
-        <id>https://wdm.life/post/markdown-chang-yong-ji-qiao/</id>
-        <link href="https://wdm.life/post/markdown-chang-yong-ji-qiao/">
+        <id>http://wdm.life/post/markdown-chang-yong-ji-qiao/</id>
+        <link href="http://wdm.life/post/markdown-chang-yong-ji-qiao/">
         </link>
         <updated>2020-06-20T13:48:36.000Z</updated>
     </entry>
     <entry>
         <title type="html"><![CDATA[GitLab学习笔记]]></title>
-        <id>https://wdm.life/post/gitlab-xue-xi-bi-ji/</id>
-        <link href="https://wdm.life/post/gitlab-xue-xi-bi-ji/">
+        <id>http://wdm.life/post/gitlab-xue-xi-bi-ji/</id>
+        <link href="http://wdm.life/post/gitlab-xue-xi-bi-ji/">
         </link>
         <updated>2020-06-19T10:42:06.000Z</updated>
     </entry>
