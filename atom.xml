@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://wdm.life</id>
-    <title>右江彼岸</title>
-    <updated>2021-07-11T18:35:29.753Z</updated>
+    <title>基特</title>
+    <updated>2021-07-11T18:36:45.115Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="http://wdm.life"/>
     <link rel="self" href="http://wdm.life/atom.xml"/>
     <subtitle>阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。</subtitle>
     <logo>http://wdm.life/images/avatar.png</logo>
     <icon>http://wdm.life/favicon.ico</icon>
-    <rights>All rights reserved 2021, 右江彼岸</rights>
+    <rights>All rights reserved 2021, 基特</rights>
     <entry>
         <title type="html"><![CDATA[数组和链表的区别]]></title>
         <id>http://wdm.life/post/shu-zu-he-lian-biao-de-qu-bie/</id>
