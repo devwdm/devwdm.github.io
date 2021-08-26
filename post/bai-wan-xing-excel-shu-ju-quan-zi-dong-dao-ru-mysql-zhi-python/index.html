@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>百万行Excel数据全自动导入MYSQL之Python | 基特</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="http://wdm.life/favicon.ico?v=1629945923120">
+<link rel="stylesheet" href="http://wdm.life/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="百万行Excel数据全自动导入MYSQL之Python
+import pandas as pd
+import pymysql
+import pypinyin
+import re
+import time
+import os
+
+start_ti..." />
+    <meta name="keywords" content="python,excel,批量,导入,百万,mysql" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="http://wdm.life">
+        <img src="http://wdm.life/images/avatar.png?v=1629945923120" class="site-logo">
+        <h1 class="site-title">基特</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/devwdm" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="http://wdm.life/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">百万行Excel数据全自动导入MYSQL之Python</h2>
+            <div class="post-date">2021-08-26 10:08:00</div>
+            
+            <div class="post-content" v-pre>
+              <center><h1>百万行Excel数据全自动导入MYSQL之Python</h1></center>
+<pre><code class="language-python">import pandas as pd
+import pymysql
+import pypinyin
+import re
+import time
+import os
+
+start_time_count = time.time()
+# 文件名
+filename = '****.xlsx'
+host = &quot;你的数据ip&quot;
+user = &quot;数据库用户&quot;
+password = &quot;数据库密码&quot;
+database = &quot;数据库名&quot;
+# 当前python文件位置
+folder_path = os.path.dirname(__file__)
+fiel_path = os.path.join(folder_path, filename)
+# 数据库表名 根据文件名来获取
+list_table = filename.split('.')
+table_name = str(list_table[0])
+# 中文转换为拼音
+def pinyin(word):
+    # 匹配不是中文、大小写、数字的其他字符
+    cop = re.compile(&quot;[^\u4e00-\u9fa5^a-z^A-Z^0-9]&quot;)
+    word = cop.sub('', word)
+    s = ''
+    # x = 0
+    for i in pypinyin.pinyin(word, style=pypinyin.NORMAL):
+        if s != '':
+            s = s+'_'+''.join(i)
+        else:
+            s += ''.join(i)
+    return s
+
+
+# mysql
+# 打开数据库连接
+db = pymysql.connect(host=host, user=user,
+                     password=password, database=database)
+# 使用 cursor() 方法创建一个游标对象 cursor
+cursor = db.cursor()
+# 使用 execute()  方法执行 SQL 查询
+cursor.execute(&quot;SELECT VERSION()&quot;)
+# 使用 fetchone() 方法获取单条数据
+data = cursor.fetchone()
+
+print('数据库连接成功')
+print(&quot;Database version : %s &quot; % data)
+
+print('正在打开文件……')
+if list_table[1] == &quot;csv&quot;:
+    df = pd.read_csv(fiel_path)  # 默认读取第一个sheet的内容
+else:
+    df = pd.read_excel(fiel_path)  # 默认读取第一个sheet的内容
+
+end_time_read_excel = time.time()
+print('打开文件耗时：'+str(end_time_read_excel-start_time_count))
+print('文件打开成功……')
+# 把表头转换为字段名
+print('把表头转换为字段名C1_')
+list_col_name = []
+# 批量定义字段名 类型 长度
+list_col_name_sql_creat = []
+index_col = 1
+for i in df.columns.tolist():
+    # name_col = &quot;c&quot;+str(index_col)+i
+    name_col = &quot;c&quot;+str(index_col)
+    # name_col = pinyin(name_col)
+    list_col_name.append(name_col)
+    name_col = name_col+&quot; VARCHAR(255) &quot;
+    list_col_name_sql_creat.append(name_col)
+    index_col += 1
+print(&quot;有%s列&quot; % str(len(list_col_name)))
+# 添加id
+list_col_name.append('id')
+list_col_name_sql_creat.append(
+    'id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)')
+
+# 拼接字段名
+print('拼接字段名')
+sql_list_col_name = &quot;,&quot;.join(list_col_name_sql_creat)
+print('创建表格')
+sql_create_table = 'CREATE TABLE IF NOT EXISTS ' + table_name + '('+sql_list_col_name+')'
+cursor.execute(sql_create_table)
+print(sql_create_table)
+
+print(&quot;--------------正在组装sql-------------------------&quot;)
+# 创建批量添加sql
+s_count = len(list_col_name) * &quot;%s,&quot;
+cols = ','.join(list_col_name)
+insert_sql = &quot;insert into &quot; + table_name + \
+    &quot; (&quot; + cols + &quot;) values (&quot; + s_count[:-1] + &quot;)&quot;
+
+
+def sql_exec_manys(data_list):
+    try:
+        cursor.executemany(insert_sql, data_list)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        print(&quot;--------------insert_sql-----error--------------------&quot;)
+        print(insert_sql)
+        print(&quot;--------------insert_data_list----error---------------&quot;)
+        print(insert_data_list[0])
+        print(e)
+
+
+print(&quot;--------------正在新增id列-------------------------&quot;)
+# 新增加的excel写入内存
+start_time_ram = time.time()
+df['id'] = ''
+# 删除空行
+df.drop_duplicates(inplace=True)
+end_time_ram = time.time()
+df.fillna('', inplace=True)
+insert_data_list = [tuple(i) for i in df.values]
+print(&quot;替换与tuple耗时：%s&quot; % str(time.time()-end_time_ram))
+print(&quot;--------------正在写入MYSQL数据库------------------------&quot;)
+len_list = len(insert_data_list)
+count_c = len_list
+# 每次导入 30W 行
+deal_c = 300000
+start_time_insert = time.time()
+
+while(len_list &gt; deal_c):
+    data_list = insert_data_list[0:deal_c]
+    sql_exec_manys(data_list)
+    print(&quot;已导入%s条数据&quot; % deal_c)
+    del insert_data_list[0:deal_c]
+    len_list = len_list-deal_c
+else:
+    sql_exec_manys(insert_data_list)
+    print(&quot;已导入%s条数据&quot; % len_list)
+
+end_time_mysql = time.time()
+# 写入结束时间
+end_time_count = time.time()
+
+print('数据已经全部导入完成')
+print('共计导入：'+str(count_c)+' 条数据')
+print('打开文件耗时：'+str(end_time_read_excel-start_time_count))
+print(&quot;写入内存消耗时间：&quot;+str(end_time_ram-start_time_ram))
+print(&quot;操作临时文件耗时：&quot;+str(end_time_mysql-start_time_ram))
+print(&quot;insert into总时间：&quot;+str(end_time_count - start_time_insert))
+print(&quot;运行总时间：&quot;+str(end_time_count-start_time_count))
+db.close()
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="http://wdm.life/tag/python/" class="tag">
+                    python
+                  </a>
+                
+                  <a href="http://wdm.life/tag/excel/" class="tag">
+                    excel
+                  </a>
+                
+                  <a href="http://wdm.life/tag/pi-liang/" class="tag">
+                    批量
+                  </a>
+                
+                  <a href="http://wdm.life/tag/dao-ru/" class="tag">
+                    导入
+                  </a>
+                
+                  <a href="http://wdm.life/tag/bai-wan/" class="tag">
+                    百万
+                  </a>
+                
+                  <a href="http://wdm.life/tag/mysql/" class="tag">
+                    mysql
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="http://wdm.life/post/dian-xin-guang-mao-pei-zhi-qiao-jie/">
+                  <h3 class="post-title">
+                    电信光猫配置-桥接
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'e4e7110311b4c3ba9cb7',
+        clientSecret: '2feab7604d5fe1d18b9059dea0d7b8f58ebbfe30',
+        repo: 'comments',
+        owner: 'devwdm',
+        admin: ['devwdm'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

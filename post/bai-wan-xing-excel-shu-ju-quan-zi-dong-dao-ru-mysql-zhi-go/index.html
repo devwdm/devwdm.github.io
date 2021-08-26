@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>百万行Excel数据全自动导入MYSQL之Go | 基特</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="http://wdm.life/favicon.ico?v=1629945923120">
+<link rel="stylesheet" href="http://wdm.life/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="百万行Excel数据全自动导入MYSQL之Go
+执行文件与excel表格在同一个目录下
+package main
+
+import (
+	&quot;database/sql&quot;
+	&quot;fmt&quot;
+	&quot;str..." />
+    <meta name="keywords" content="excel,批量,导入,百万,mysql,Go" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="http://wdm.life">
+        <img src="http://wdm.life/images/avatar.png?v=1629945923120" class="site-logo">
+        <h1 class="site-title">基特</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/devwdm" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      阅读可扩展眼界，行走可开阔视野，交流可颠覆认知，总结可汲取能量，分享可升华自我。
+    </div>
+    <div class="site-footer">
+       | <a class="rss" href="http://wdm.life/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">百万行Excel数据全自动导入MYSQL之Go</h2>
+            <div class="post-date">2021-08-26 10:08:00</div>
+            
+            <div class="post-content" v-pre>
+              <center><h1>百万行Excel数据全自动导入MYSQL之Go</h1></center>
+<p>执行文件与excel表格在同一个目录下</p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;database/sql&quot;
+	&quot;fmt&quot;
+	&quot;strconv&quot;
+	&quot;strings&quot;
+	&quot;time&quot;
+
+	_ &quot;github.com/go-sql-driver/mysql&quot;
+	&quot;github.com/mozillazg/go-pinyin&quot;
+	&quot;github.com/xuri/excelize/v2&quot;
+)
+
+//数据库配置
+const (
+	userName = &quot;用户名&quot;
+	password = &quot;密码&quot;
+	ip       = &quot;数据库ip地址&quot;
+	port     = &quot;端口&quot;
+	dbName   = &quot;数据库名&quot;
+)
+
+//Db数据库连接池
+var DB *sql.DB
+
+func InitDB() {
+	//构建连接：&quot;用户名:密码@tcp(IP:端口)/数据库?charset=utf8&quot;
+	path := strings.Join([]string{userName, &quot;:&quot;, password, &quot;@tcp(&quot;, ip, &quot;:&quot;, port, &quot;)/&quot;, dbName, &quot;?charset=utf8&quot;}, &quot;&quot;)
+
+	DB, _ = sql.Open(&quot;mysql&quot;, path)
+	//设置数据库最大连接数
+	DB.SetConnMaxLifetime(100)
+	//设置上数据库最大闲置连接数
+	DB.SetMaxIdleConns(10)
+	//验证连接
+	if err := DB.Ping(); err != nil {
+		fmt.Println(&quot;opon database fail&quot;)
+		return
+	}
+	fmt.Println(&quot;connnect success&quot;)
+}
+
+func exec_sql(insert_sql string, data []interface{}) (sql.Result, error) {
+	tx, _ := DB.Begin()
+	result, err := tx.Exec(insert_sql, data...)
+	if err != nil {
+		tx.Rollback().Error()
+	} else {
+		tx.Commit()
+	}
+	return result, err
+}
+
+func py(words string) string {
+	words = strings.TrimSpace(words)
+	list_words := pinyin.LazyConvert(words, nil)
+	words = &quot;&quot;
+	for i, v := range list_words {
+		if i != 0 {
+			words = strings.Join([]string{words, v}, &quot;_&quot;)
+		} else {
+			words = strings.Join([]string{words, v}, &quot;&quot;)
+		}
+	}
+	return words
+}
+
+func ph(len_col int) string {
+	placeHolders := &quot;(?&quot;
+	for i := 0; i &lt; len_col; i++ {
+		placeHolders = strings.Join([]string{placeHolders, &quot;?&quot;}, &quot;,&quot;)
+	}
+	placeHolders = strings.Join([]string{placeHolders, &quot;)&quot;}, &quot;&quot;)
+	return placeHolders
+}
+
+func main() {
+	start_time_count := time.Now() //获取当前时间
+	go InitDB()
+  // 文件名
+	file_name := &quot;***.xlsx&quot;
+	file_name_slice := strings.Split(file_name, &quot;.&quot;)
+	table_name := file_name_slice[0]
+	f, err := excelize.OpenFile(file_name)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+  // 工作薄名称默认Sheet1
+	rows, err := f.Rows(&quot;Sheet1&quot;)
+	go fmt.Printf(&quot;打开文件耗时 = %v\n&quot;, time.Since(start_time_count))
+	data_excels := []interface{}{}
+	value_strings := make([]string, 0)
+
+	col_name_sql_creats := &quot;CREATE TABLE IF NOT EXISTS &quot; + table_name + &quot;( &quot;
+
+	// 每次插入 行
+	deal_c := 1000
+	deal_c_now := 0
+	placeHolders := &quot;&quot;
+	data_counts := 0
+	go fmt.Println(&quot;正在导入数据……&quot;)
+	start_time_insert := time.Now()
+	for rows.Next() {
+		deal_c_now++
+		data_counts++
+		row, _ := rows.Columns()
+		if data_counts == 1 {
+			len_col := len(row)
+			placeHolders = ph(len_col)
+			fmt.Printf(&quot;有 %v 列\n&quot;, strconv.Itoa(len_col))
+			for i, _ := range row {
+				c := &quot;c&quot;
+				c = strings.Join([]string{c, strconv.Itoa(i+1) + &quot; VARCHAR(255), &quot;}, &quot;&quot;)
+				col_name_sql_creats = strings.Join([]string{col_name_sql_creats, c}, &quot; &quot;)
+			}
+			col_name_sql_creats = strings.Join([]string{col_name_sql_creats, &quot;id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (id) )&quot;}, &quot;&quot;)
+			DB.Exec(col_name_sql_creats)
+			fmt.Println(col_name_sql_creats)
+		}
+		for _, colCell := range row {
+			data_excels = append(data_excels, colCell)
+		}
+
+		data_excels = append(data_excels, &quot;&quot;)
+		value_strings = append(value_strings, placeHolders)
+		for deal_c_now &gt; deal_c {
+			insert_sql := fmt.Sprintf(&quot;INSERT INTO &quot;+table_name+&quot;  VALUES %v&quot;, strings.Join(value_strings, &quot;,&quot;))
+			exec_sql(insert_sql, data_excels)
+			// go fmt.Printf(&quot;已导入%v条数据\n&quot;, deal_c)
+			data_excels = []interface{}{}
+			value_strings = make([]string, 0)
+			deal_c_now = 0
+		}
+	}
+	insert_sql := fmt.Sprintf(&quot;INSERT INTO ggxh VALUES %v&quot;, strings.Join(value_strings, &quot;,&quot;))
+	exec_sql(insert_sql, data_excels)
+	fmt.Printf(&quot;最后一次导入%v条数据\n&quot;, deal_c_now)
+	fmt.Printf(&quot;共计导入%v条数据\n&quot;, data_counts)
+	fmt.Printf(&quot;insert into总时间 = %v\n&quot;, time.Since(start_time_insert))
+	fmt.Printf(&quot;运行 总耗时 = %v\n&quot;, time.Since(start_time_count))
+	defer DB.Close()
+}
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="http://wdm.life/tag/excel/" class="tag">
+                    excel
+                  </a>
+                
+                  <a href="http://wdm.life/tag/pi-liang/" class="tag">
+                    批量
+                  </a>
+                
+                  <a href="http://wdm.life/tag/dao-ru/" class="tag">
+                    导入
+                  </a>
+                
+                  <a href="http://wdm.life/tag/bai-wan/" class="tag">
+                    百万
+                  </a>
+                
+                  <a href="http://wdm.life/tag/mysql/" class="tag">
+                    mysql
+                  </a>
+                
+                  <a href="http://wdm.life/tag/GafwzNZsK/" class="tag">
+                    Go
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="http://wdm.life/post/bai-wan-xing-excel-shu-ju-quan-zi-dong-dao-ru-mysql-zhi-python/">
+                  <h3 class="post-title">
+                    百万行Excel数据全自动导入MYSQL之Python
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'e4e7110311b4c3ba9cb7',
+        clientSecret: '2feab7604d5fe1d18b9059dea0d7b8f58ebbfe30',
+        repo: 'comments',
+        owner: 'devwdm',
+        admin: ['devwdm'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
